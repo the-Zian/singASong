@@ -21,8 +21,8 @@ The list could go on.
 There are several datasets of song lyrics with artist, genre, and other relevant features readily available on the web.
 
 **Potential Sources:**  
-* (Kaggle - MetroLyrics)[https://www.kaggle.com/gyani95/380000-lyrics-from-metrolyrics]: Over 380,000 lyrics scraped from MetroLyrics with artist, genre, and year attributes  
-* (Million Song Dataset)[https://labrosa.ee.columbia.edu/millionsong/]: A collection of complimentary audio and song datasets including datasets of cleaned and pre-processed (lyrics)[http://labrosa.ee.columbia.edu/millionsong/musixmatch] and [genre](http://www.tagtraum.com/msd_genre_datasets.html)
+* [Kaggle - MetroLyrics](https://www.kaggle.com/gyani95/380000-lyrics-from-metrolyrics): Over 380,000 lyrics scraped from MetroLyrics with artist, genre, and year attributes  
+* [Million Song Dataset](https://labrosa.ee.columbia.edu/millionsong/): A collection of complimentary audio and song datasets including datasets of cleaned and pre-processed [lyrics](http://labrosa.ee.columbia.edu/millionsong/musixmatch) and [genre](http://www.tagtraum.com/msd_genre_datasets.html)
 
 ## Methods
 We plan to employ a variety of supervised ML techniques including, but not limited to:  
