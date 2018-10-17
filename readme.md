@@ -22,7 +22,7 @@ There are several datasets of song lyrics with artist, genre, and other relevant
 * [Million Song Dataset](https://labrosa.ee.columbia.edu/millionsong/): A vast collection of complimentary audio and song datasets including datasets of cleaned and pre-processed [lyrics](http://labrosa.ee.columbia.edu/millionsong/musixmatch) and [genre](http://www.tagtraum.com/msd_genre_datasets.html)
 
 ## Methods
-For feature engineering, we will employ a bag-of-words model on the lyric text.
+For feature engineering, we will begin with a bag-of-words model on the lyric text, and possibly explore additional deep learning alternatives.
 
 For genre classification and prediction, we plan to employ a variety of supervised ML techniques including, but not limited to:  
 
