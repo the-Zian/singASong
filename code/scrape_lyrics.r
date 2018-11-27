@@ -6,6 +6,9 @@
 source('code/library_scrape.r')
 
 
+# Scrape date
+timestamp = Sys.time()
+
 # Url of all genre-pages
 url_base <- "https://www.lyrics.com/genre/Hip%20Hop;Jazz;Latin;Brass%20__%20Military;Blues;Children's;Classical;Electronic;Folk,%20World,%20__%20Country;Funk%20--%20Soul;Non-Music;Pop;Reggae;Rock;Stage%20__%20Screen"
 
@@ -44,6 +47,9 @@ song_lyrics_cleaned <- lapply(song_lyrics, function(lyric) gsub(ptrn, '', lyric)
 # Remove all carriage returns/newlines/etc.
 ptrn <- '[\\\r\\\n]'
 song_lyrics_cleaned <- lapply(song_lyrics_cleaned, function(lyric) gsub(ptrn, ' ', lyric))
+# Replace lyric-less songs with empty string
+missings <- sapply(song_lyrics_cleaned, function(x) length(x)==0)
+song_lyrics_cleaned[missings] <- c('')
 
 # Genres
 xpth <- '//*[@id="content-body"]/div/div/div[@class="lyric-infobox clearfix"][2]//div[@class="col-sm-6"][1]/div//text()'
@@ -54,3 +60,10 @@ song_genres_cleaned <- clean_genreStyles(song_genres)
 xpth <- '//*[@id="content-body"]/div/div/div[@class="lyric-infobox clearfix"][2]//div[@class="col-sm-6"][2]/div//text()'
 song_styles <- lapply(song_urls_parsed, function(p) scrape_gen(p, xpth))
 song_styles_cleaned <- clean_genreStyles(song_styles)
+
+
+###################
+# Compile
+source(compile.r)
+
+
