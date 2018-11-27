@@ -53,4 +53,4 @@ song_genres_cleaned <- clean_genreStyles(song_genres)
 # Styles
 xpth <- '//*[@id="content-body"]/div/div/div[@class="lyric-infobox clearfix"][2]//div[@class="col-sm-6"][2]/div//text()'
 song_styles <- lapply(song_urls_parsed, function(p) scrape_gen(p, xpth))
-song_styles <- clean_genreStyles(song_styles)
+song_styles_cleaned <- clean_genreStyles(song_styles)
