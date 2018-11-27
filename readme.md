@@ -17,9 +17,8 @@ The advent of readily available, scalable natural language processing (NLP) and 
 ## Data
 There are several datasets of song lyrics with artist, genre, and other relevant features readily available on the web.
 
-**Potential Sources:**  
-* [Kaggle - MetroLyrics](https://www.kaggle.com/gyani95/380000-lyrics-from-metrolyrics): Over 380,000 lyrics scraped from MetroLyrics with artist, genre, and year attributes  
-* [Million Song Dataset](https://labrosa.ee.columbia.edu/millionsong/): A vast collection of complimentary audio and song datasets including datasets of cleaned and pre-processed [lyrics](http://labrosa.ee.columbia.edu/millionsong/musixmatch) and [genre](http://www.tagtraum.com/msd_genre_datasets.html)
+**Sources**
+We scrape song lyrics from https://www.lyrics.com, an online song lyrics database with over 1.2 million songs tagged by genre. The site contains song lyrics as well as metadata on artist, album, song title, and year (for most songs).
 
 ## Methods
 For feature engineering, we will begin with a bag-of-words model on the lyric text, and possibly explore additional deep learning alternatives.
