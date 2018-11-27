@@ -2,18 +2,31 @@
 #   Scrape all pages from all genres, then scrape all song urls from each page
 
 
+timestamp = Sys.time()
+
+# Parse command args
+args <- commandArgs(trailingOnly=TRUE)
+
+
 # Source scraping library
 source('code/library_scrape.r')
 
-
-# Scrape date
-timestamp = Sys.time()
 
 # Url of all genre-pages
 url_base <- "https://www.lyrics.com/genre/Hip%20Hop;Jazz;Latin;Brass%20__%20Military;Blues;Children's;Classical;Electronic;Folk,%20World,%20__%20Country;Funk%20--%20Soul;Non-Music;Pop;Reggae;Rock;Stage%20__%20Screen"
 
 # NOTE: 52022 pages total, last page is eh...
-urls_pages <- sapply(seq(52021), function(p) paste0(url_base, '&p=', p))
+if (length(args)==0) {
+    urls_pages <- sapply(seq(52021), function(p) paste0(url_base, '&p=', p))
+} else {
+    # Scrape only specified pages
+    pg_start <- args[[1]]
+    pg_end <- args[[2]]
+
+    urls_pages <- sapply(seq(from=pg_start, to=pg_end), function(p) paste0(url_base, '&p=', p))
+}
+
+
 # Parse html for all pages
 parsed_htmls <- lapply(urls_pages, parse_site_content)
 
@@ -33,8 +46,15 @@ song_urls_full <- unlist(song_urls_full)
 
 
 ###################
-# Scrape each song pages
+# Scrape each song lyric pages
 song_urls_parsed <- lapply(song_urls_full, parse_site_content)
+
+# Song year
+xpth <- '//*[@id="content-body"]//div[contains(@class,"artist-meta")]//div[contains(@class,"lyric-details")]/dl/dd//text()'
+song_years <- lapply(song_urls_parsed, function(p) scrape_gen(p, xpth))
+song_years_cleaned <- lapply(song_years, function(x) as.numeric(as.character(x[1])))
+missings <- sapply(song_years_cleaned, function(x) length(x)==0)
+song_years_cleaned[missings] <- c(NA)
 
 # Lyrics
 # xpath for lyrics
@@ -64,6 +84,7 @@ song_styles_cleaned <- clean_genreStyles(song_styles)
 
 ###################
 # Compile
-source(compile.r)
+source('code/compile.r')
 
-
+end <- Sys.time()
+print(end-timestamp)
