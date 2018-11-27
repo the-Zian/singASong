@@ -44,6 +44,9 @@ song_lyrics_cleaned <- lapply(song_lyrics, function(lyric) gsub(ptrn, '', lyric)
 # Remove all carriage returns/newlines/etc.
 ptrn <- '[\\\r\\\n]'
 song_lyrics_cleaned <- lapply(song_lyrics_cleaned, function(lyric) gsub(ptrn, ' ', lyric))
+# Replace lyric-less songs with empty string
+missings <- sapply(song_lyrics_cleaned, function(x) length(x)==0)
+song_lyrics_cleaned[missings] <- c('')
 
 # Genres
 xpth <- '//*[@id="content-body"]/div/div/div[@class="lyric-infobox clearfix"][2]//div[@class="col-sm-6"][1]/div//text()'
