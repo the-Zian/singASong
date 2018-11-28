@@ -3,6 +3,7 @@
 
 
 timestamp = Sys.time()
+timestamp
 
 # Parse command args
 args <- commandArgs(trailingOnly=TRUE)
