@@ -3,9 +3,25 @@
 library(rvest)
 library(xml2)
 library(httr)
+library(parallel)
+library(doParallel)
 
 
 # FUNCTIONS
+register_parallel <- function(num_cores=NA) {
+    # Setup cores for parallel computing
+
+    if (is.na(num_cores)) {
+        num_cores <- parallel::detectCores()
+    }
+    cl <- parallel::makeCluster(num_cores - 1)
+    doParallel::registerDoParallel(cl)
+    print(paste0('Registered ', (num_cores - 1), ' cores for parallel computing'))
+
+    return(cl)
+}
+
+
 parse_site_content <- function(url) {
     # Retrieve url request content, parse html content as utf-8 text
 

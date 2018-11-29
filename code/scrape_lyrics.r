@@ -2,15 +2,15 @@
 #   Scrape all pages from all genres, then scrape all song urls from each page
 
 
-timestamp = Sys.time()
-timestamp
+start <- Sys.time()
+print(start)
 
 # Parse command args
 args <- commandArgs(trailingOnly=TRUE)
 
 
 # Source scraping library
-source('code/library_scrape.r')
+source('code/library_scrape.r', echo=FALSE)
 
 
 # Url of all genre-pages
@@ -87,5 +87,6 @@ song_styles_cleaned <- clean_genreStyles(song_styles)
 # Compile
 source('code/compile.r')
 
+
 end <- Sys.time()
-print(end-timestamp)
+print(end-start)
