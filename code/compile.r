@@ -28,7 +28,7 @@ styles <- sapply(song_styles_cleaned, function(x) paste0(x, collapse=' | '))
 songData <- tibble(artist=artists, album=albums, year=years, title=titles,
     lyrics=lyrics,
     genre=genres, style=styles,
-    url=urls, scrape_dt=timestamp)
+    url=urls, scrape_dt=start)
 
 
 ###################
