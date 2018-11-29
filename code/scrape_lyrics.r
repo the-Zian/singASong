@@ -6,7 +6,7 @@ start <- Sys.time()
 print(start)
 
 # Parse command args
-args <- commandArgs(trailingOnly=TRUE)
+userArgs <- commandArgs(trailingOnly=TRUE)
 
 
 # Source scraping library
@@ -17,12 +17,12 @@ source('code/library_scrape.r', echo=FALSE)
 url_base <- "https://www.lyrics.com/genre/Hip%20Hop;Jazz;Latin;Brass%20__%20Military;Blues;Children's;Classical;Electronic;Folk,%20World,%20__%20Country;Funk%20--%20Soul;Non-Music;Pop;Reggae;Rock;Stage%20__%20Screen"
 
 # NOTE: 52022 pages total, last page is eh...
-if (length(args)==0) {
+if (length(userArgs)==0) {
     urls_pages <- sapply(seq(52021), function(p) paste0(url_base, '&p=', p))
 } else {
     # Scrape only specified pages
-    pg_start <- args[[1]]
-    pg_end <- args[[2]]
+    pg_start <- userArgs[[1]]
+    pg_end <- userArgs[[2]]
 
     urls_pages <- sapply(seq(from=pg_start, to=pg_end), function(p) paste0(url_base, '&p=', p))
 }
