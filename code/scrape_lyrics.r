@@ -5,6 +5,7 @@
 start <- Sys.time()
 print(start)
 
+
 # Parse command args
 userArgs <- commandArgs(trailingOnly=TRUE)
 
@@ -30,6 +31,7 @@ if (length(userArgs)==0) {
 
 # Parse html for all pages
 parsed_htmls <- lapply(urls_pages, parse_site_content)
+
 
 ###################
 # Scrape genre pages

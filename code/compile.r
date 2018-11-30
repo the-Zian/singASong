@@ -1,7 +1,7 @@
 # Purpose: Compile scraped song meta data [title, album, artist], lyrics, genre, style
 
 
-library(tidyverse)
+suppressMessages(library(tidyverse))
 
 
 ###################
