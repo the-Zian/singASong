@@ -81,7 +81,7 @@ report_diagnostics <- function(drops, start_page=userArgs[[1]], urls=urls_pages)
     diag_file <- 'diagnostics/scrape.txt'
     sink(file=diag_file)
     for (i in drops) {
-        cat(paste0(i, ' -> ', urls_pages[[i]]))
+        cat(paste0(i, ' -> ', urls_pages[[i]], '\n'))
     }
     sink(file=diag_file, append=TRUE)
 
