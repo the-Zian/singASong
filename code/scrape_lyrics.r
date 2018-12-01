@@ -8,7 +8,6 @@ timestamp
 # Parse command args
 args <- commandArgs(trailingOnly=TRUE)
 
-
 # Source scraping library
 source('code/library_scrape.r')
 
