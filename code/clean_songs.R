@@ -1,10 +1,11 @@
-## Cleaning songs
+# Purpose: Clean combined scraped lyric data
+
 if(!require(qdapTools)) {
-  install.packages(qdapTools)
+  install.packages('qdapTools')
 }
 library(qdapTools)
 library(stringi)
-library(tidyverse)
+suppressMessages(library(tidyverse))
 
 songs <- readr::read_csv('data/songData_combined.csv', locale = locale(encoding = 'LATIN1'))
 
