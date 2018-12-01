@@ -19,6 +19,8 @@ url_base <- "https://www.lyrics.com/genre/Hip%20Hop;Jazz;Latin;Brass%20__%20Mili
 # NOTE: 52022 pages total, last page is eh...
 if (length(userArgs)==0) {
     urls_pages <- sapply(seq(52021), function(p) paste0(url_base, '&p=', p))
+    pg_start <- 1
+    pg_end <- 52021
 } else {
     # Scrape only specified pages
     pg_start <- userArgs[[1]]
@@ -41,9 +43,11 @@ song_metas <- lapply(parsed_htmls, function(p) scrape_gen(p, xpth))
 
 # Check for any pages with missing song meta data; just drop those pages from analysis
 drop.idx <- which(sapply(song_metas, length) != 72)
-report_diagnostics(drop.idx)
-song_metas <- song_metas[-drop.idx]
-parsed_htmls <- parsed_htmls[-drop.idx]
+if (length(drop.idx) > 0) {
+    report_diagnostics(drop.idx)
+    song_metas <- song_metas[-drop.idx]
+    parsed_htmls <- parsed_htmls[-drop.idx]
+}
 
 # xpath to song url
 xpth <- '//*[@id="content-body"]/div/div[position()>=3 and position()<=14]/div/p[1]//a'
