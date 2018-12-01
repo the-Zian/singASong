@@ -12,13 +12,13 @@ songs_clean <- songs %>%
   # Remove NA lyrics
   na.omit(lyrics) %>%
   
-  # Remove audiobooks
-  filter(style != "Audiobook") %>%
-  
   # Remove "live", "remix" tags
   mutate(title = gsub('[[:punct:]]live[[:punct:]]', '', title, ignore.case = TRUE),
          title = gsub('[[:punct:]]remix[[:punct:]]', '', title, ignore.case = TRUE)) %>%
   mutate(title = trimws(title, 'right')) %>%
+  
+  # Remove duplicate URLs
+  distinct(url, .keep_all = TRUE) %>%
   
   # Remove duplicated lyrics (ignore case); keep first chronologically (this hopefully takes care of covers)
   arrange(year) %>%
@@ -32,8 +32,10 @@ songs_clean <- songs %>%
   ungroup() %>%
   
   # De-formatted genre and style tags
-  mutate(genre_lower = gsub("&amp;|/|[[:space:]]|,|-|'", '', tolower(genre)),
-         style_lower = gsub("&amp;|/|[[:space:]]|,|-|'", '', tolower(style))) %>%
+  mutate(genre_lower = paste0("genre.", gsub("&amp;|/|[[:space:]]|,|-|'", '', tolower(genre))),
+         genre_lower = gsub("\\|", "\\|genre.", genre_lower),
+         style_lower = paste0("style.", gsub("&amp;|/|[[:space:]]|,|-|'", '', tolower(style))),
+         style_lower = gsub("\\|", "\\|style.", style_lower)) %>%
   
   dplyr::select(artist, year, album, title, genre, genre_lower, style, style_lower, lyrics, url, scrape_dt)
 
