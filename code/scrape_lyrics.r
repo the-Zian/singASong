@@ -39,6 +39,12 @@ xpth <- '//*[@id="content-body"]/div/div[position()>=3 and position()<=14]/div/p
 # 3 elements per song
 song_metas <- lapply(parsed_htmls, function(p) scrape_gen(p, xpth))
 
+# Check for any pages with missing song meta data; just drop those pages from analysis
+drop.idx <- which(sapply(song_metas, length) != 72)
+report_diagnostics(drop.idx)
+song_metas <- song_metas[-drop.idx]
+parsed_htmls <- parsed_htmls[-drop.idx]
+
 # xpath to song url
 xpth <- '//*[@id="content-body"]/div/div[position()>=3 and position()<=14]/div/p[1]//a'
 song_urls <- lapply(parsed_htmls, function(p) scrape_href(p, xpth))

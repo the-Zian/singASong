@@ -71,3 +71,20 @@ clean_genreStyles <- function(song_meta) {
     return( text )
 }
 
+
+report_diagnostics <- function(drops, start_page=userArgs[[1]], urls=urls_pages) {
+    # Report which pages did not get scraped due to missing meta data
+
+    # Report actual page drops occured
+    drops <- drops + start_page - 1
+    # Write file
+    diag_file <- 'diagnostics/scrape.txt'
+    sink(file=diag_file)
+    for (i in drops) {
+        cat(paste0(i, ' -> ', urls_pages[[i]]))
+    }
+    sink(file=diag_file, append=TRUE)
+
+    return(TRUE)
+}
+
