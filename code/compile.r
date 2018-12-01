@@ -1,7 +1,7 @@
 # Purpose: Compile scraped song meta data [title, album, artist], lyrics, genre, style
 
 
-library(tidyverse)
+suppressMessages(library(tidyverse))
 
 
 ###################
@@ -28,12 +28,12 @@ styles <- sapply(song_styles_cleaned, function(x) paste0(x, collapse=' | '))
 songData <- tibble(artist=artists, album=albums, year=years, title=titles,
     lyrics=lyrics,
     genre=genres, style=styles,
-    url=urls, scrape_dt=timestamp)
+    url=urls, scrape_dt=start)
 
 
 ###################
 # Save data
-if (length(args)==0) {
+if (length(userArgs)==0) {
     filename <- 'data/songData_full.csv'
 } else {
     filename <- paste0('data/clean/songData_', pg_start, '_', pg_end, '.csv')
