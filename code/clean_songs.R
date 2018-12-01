@@ -19,10 +19,10 @@ songs_clean <- songs %>%
   mutate(title = trimws(title, 'right')) %>%
   
   # Remove duplicate URLs
-  distinct(url, .keep_all = TRUE) %>%
-  
-  # Remove duplicated lyrics (ignore case); keep first chronologically (this hopefully takes care of covers)
   arrange(year) %>%
+  distinct(url, .keep_all = TRUE) %>%
+
+  # Remove duplicated lyrics (ignore case); keep first chronologically (this hopefully takes care of covers)
   group_by(gsub('[[:punct:]]', '', tolower(lyrics))) %>%
   summarise_all(first) %>%
   ungroup() %>%
