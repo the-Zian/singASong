@@ -1,8 +1,5 @@
 # Purpose: Clean combined scraped lyric data
 
-if(!require(qdapTools)) {
-  install.packages('qdapTools')
-}
 library(qdapTools)
 library(stringi)
 suppressMessages(library(tidyverse))
