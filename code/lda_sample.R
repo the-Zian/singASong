@@ -13,6 +13,11 @@ data(stop_words)
 
 # Read cleaned, combined data
 songs <- read_csv('data/songs_cleaned.csv')
+
+# Take a sample
+set.seed(2047)
+sample_idx <- sample(nrow(songs), 5000)
+songs <- slice(songs, sample_idx)
 songs <- mutate(songs, decade=floor(year/10)*10)
 songs <- mutate(songs, id=row_number())
 
@@ -22,11 +27,6 @@ songs <- anti_join(songs, stop_words)
 # Remove punctuation
 songs <- mutate(songs, word=gsub('[[:punct:]]', '', word))
 songs <- filter(songs, word!='')
-# Remove digits (except for words that are only 1 digit)
-one_digs <- grep('^[0-9]$', songs$word)
-any_digs <- grep('[[:digit:]]', songs$word)
-other_digs <- setdiff(any_digs, one_digs)
-songs <- songs[-other_digs,]
 # Count words, 
 song_words <- count(songs, word, id)
 
