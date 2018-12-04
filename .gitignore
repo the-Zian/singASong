@@ -1,6 +1,9 @@
 code/scratchpad.R
 data/
+diagnostics/
+dump/
 .DS_Store
+
 
 # History files
 .Rhistory
