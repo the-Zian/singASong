@@ -22,6 +22,11 @@ songs <- anti_join(songs, stop_words)
 # Remove punctuation
 songs <- mutate(songs, word=gsub('[[:punct:]]', '', word))
 songs <- filter(songs, word!='')
+# Remove digits (except for words that are only 1 digit)
+one_digs <- grep('^[0-9]$', songs$word)
+any_digs <- grep('[[:digit:]]', songs$word)
+other_digs <- setdiff(any_digs, one_digs)
+songs <- songs[-other_digs,]
 # Count words, 
 song_words <- count(songs, word, id)
 
