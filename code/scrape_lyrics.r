@@ -44,7 +44,7 @@ song_metas <- lapply(parsed_htmls, function(p) scrape_gen(p, xpth))
 # Check for any pages with missing song meta data; just drop those pages from analysis
 drop.idx <- which(sapply(song_metas, length) != 72)
 if (length(drop.idx) > 0) {
-    report_diagnostics(drop.idx)
+    report_diagnostics(drops=drop.idx, start_page=pg_start, urls=urls_pages)
     song_metas <- song_metas[-drop.idx]
     parsed_htmls <- parsed_htmls[-drop.idx]
 }
