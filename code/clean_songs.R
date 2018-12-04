@@ -1,10 +1,6 @@
 # Purpose: Clean combined scraped lyric data
 
-if(!require(qdapTools)) {
-  install.packages('qdapTools')
-}
 library(qdapTools)
-library(stringi)
 suppressMessages(library(tidyverse))
 
 songs <- readr::read_csv('data/songData_combined.csv', locale = locale(encoding = 'LATIN1'))
@@ -21,7 +17,7 @@ songs_clean <- songs %>%
   # Remove duplicate URLs
   arrange(year) %>%
   distinct(url, .keep_all = TRUE) %>%
-
+  
   # Remove duplicated lyrics (ignore case); keep first chronologically (this hopefully takes care of covers)
   group_by(gsub('[[:punct:]]', '', tolower(lyrics))) %>%
   summarise_all(first) %>%

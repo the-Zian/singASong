@@ -14,7 +14,7 @@ library(ggraph)
 
 ###################
 # Read combined scraped data
-songData <- fread('data/songData_combined.csv')
+songData <- fread('data/songs_cleaned.csv')
 
 
 ###################
@@ -37,36 +37,43 @@ theme(axis.text.x=element_text(angle=60, hjust=1))
 
 ###################
 # TIDYVERSE
-songData <- read_csv('data/songData_combined.csv')
-songData <- songData %>% mutate(decade=floor(year/10)*10)
-songData <- songData %>% mutate(genre1=sub('^(.+?) \\|..*', '\\1', genre))
+songData <- fread('data/songs_cleaned.csv') %>% 
+  mutate(decade=floor(year/10)*10) %>% 
+  mutate(genre1=sub('^(.+?) \\|..*', '\\1', genre))
 
 # Remove pure duplicates (identified by url)
-songData2 <- distinct(songData, url, .keep_all=TRUE)
-# Remove duplicates (artist, track), keep earliest song
-songData2 <- arrange(songData2, artist, desc(year), title) %>%
-    distinct(title, artist, .keep_all=TRUE)
-# Drop songs with missing lyric data
-songData2 <- songData2 %>% filter(!is.na(lyrics))
+songData2 <- distinct(songData, url, .keep_all=TRUE) %>%
+  # Remove duplicates (artist, track), keep earliest song
+  arrange(artist, desc(year), title) %>%
+  distinct(title, artist, .keep_all=TRUE) %>%
+  # Drop songs with missing lyric data
+  filter(!is.na(lyrics))
 
+songData2 %>%
+  dplyr::select(starts_with("genre.")) %>%
+  colMeans() %>%
+  round(3)
 
 # TEXT ANALYSIS
 ###################
 # tokenize by word
-tidySongData <- songData2 %>% unnest_tokens(word, lyrics)
+tidySongData <- songData2 %>% 
+  select(-starts_with("style.")) %>%
+  unnest_tokens(word, lyrics)
 data(stop_words)
-tidySongDataClean <- anti_join(tidySongData, stop_words) %>% anti_join(data.frame(word=tm::stopwords('spanish')))
+tidySongDataClean <- anti_join(tidySongData, stop_words) %>% 
+  anti_join(data.frame(word=tm::stopwords('spanish')))
 
 # Marvin Gaye sentiment analysis
 nrc <- sentiments %>%
     filter(lexicon=='nrc') %>%
     select(-score)
-marvin <- tidySongDataClean %>%
-    filter(artist=='Marvin Gaye') %>%
+beatles <- tidySongDataClean %>%
+    filter(artist=='The Beatles') %>%
     left_join(nrc)
-marvin %>% count(word) %>%
+beatles %>% count(word) %>%
     with(wordcloud(word, n, max.words=20))
-marvin %>% count(sentiment) %>%
+queen %>% count(sentiment) %>%
     with(wordcloud(sentiment, n, max.words=20))
 
 # TF-IDF by genre
