@@ -63,10 +63,12 @@ ggsave('dump/lda2_beta_spread.png', lda2_beta_spread)
 
 ###################
 # Bigrams
-bigrams <- count_ngrams(lyrics, n=2, spanish=TRUE)
+bigrams <- count_ngrams(lyrics, n=2)
 bigram_counts <- count(bigrams, ngram, song_id)
 
 bigrams_dtm <- cast_dtm(bigram_counts, song_id, ngram, n)
-lda3 <- LDA(bigrams_dtm, song_id, ngram, n)
-print('hi')
+lda3 <- LDA(bigrams_dtm, k=4, control=list(seed=666))
+
+lda3_beta_spread <- plot_beta_spread(lda3, 10)
+ggsave('dump/lda3_beta_spread.png', lda3_beta_spread)
 
