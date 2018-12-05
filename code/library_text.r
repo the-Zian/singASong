@@ -23,11 +23,10 @@ count_ngrams <- function(dt, n=2, spanish=TRUE, stopWords=myStopWords) {
         stops <- stopWords %>% filter(lexicon!='tm::spanish')
     }
 
-    dt %>% unnest_tokens(ngram, lyrics, token='ngrams', n=n) %>%
+    dt <- dt %>% unnest_tokens(ngram, lyrics, token='ngrams', n=n) %>%
         separate(ngram, word_vars, sep=' ') %>%
-        filter_at(.vars=word_vars, .vars_predicate=any_vars(!. %in% stops)) %>%
-        unite(ngram, !!word_vars, sep=' ') %>%
-        count(ngram, sort=TRUE)
+        filter_at(.vars=word_vars, .vars_predicate=any_vars(!. %in% stops$word)) %>%
+        unite(ngram, !!word_vars, sep=' ')
 
     return(dt)
 }
