@@ -1,74 +1,54 @@
 # Purpose: LDA
 
-library(tidyverse)
-library(tidytext)
-library(tm)
-library(topicmodels)
+source('code/library_text.r')
 
 
-# Load stop words
-data(stop_words)
-# Remove stop words
-stop_words <- rbind(stop_words, data.frame(word=tm::stopwords('spanish'), lexicon='tm'))
-
+evil.seed <- 666
+cl <- register_parallel()
 # Read cleaned, combined data
 raw <- read_csv('data/songs_cleaned.csv')
 lyrics <- raw %>%
     mutate(decade=floor(year/10)*10)
+# Create ids
 lyrics <- lyrics %>%
     mutate(song_id=row_number()) %>%
     group_by(artist) %>%
     mutate(artist_id=as.numeric(as.factor(artist))) %>%
     ungroup()
 
-# Unnest tokens
-songs <- lyrics %>% unnest_tokens(word, lyrics, token='words')
-songs <- anti_join(songs, stop_words, by='word')
-# Remove punctuation
-songs <- mutate(songs, word=gsub('[[:punct:]]', '', word))
-songs <- filter(songs, word!='')
-# Remove digits (except for words that are only 1 digit)
-one_digs <- grep('^[0-9]$', songs$word)
-any_digs <- grep('[[:digit:]]', songs$word)
+
+###################
+# MODELS
+
+# Words
+###################
+# By song
+words <- unnest_ngrams(lyrics, n=1)
+# Remove numeric "words" greater than one digit
+one_digs <- grep('^[0-9]$', words$ngram)
+any_digs <- grep('[[:digit:]]', words$ngram)
 other_digs <- setdiff(any_digs, one_digs)
-songs <- songs[-other_digs,]
-
-
-###################
-# By song analysis
-# Count words,
-song_words <- count(songs, word, song_id)
-# Cast to dtm
-songs_dtm <- cast_dtm(song_words, song_id, word, n)
-
-# LDA MODELS
-lda1 <- LDA(songs_dtm, k=5, control=list(seed=666))
-
-lda1_beta_spread <- plot_beta_spread(lda1, 10)
-ggsave('dump/lda1_beta_spread.png', lda1_beta_spread)
-
-
-###################
-# By artist analysis
-artist_words <- count(songs, word, artist_id)
-# Cast to dtm
-artists_dtm <- cast_dtm(artist_words, artist_id, word, n)
-
+words <- words[-other_digs,]
+# count words
+song.words.count <- count(words, ngram, song_id)
+# cast to dtm
+song.words.dtm <- cast_dtm(song.words.count, song_id, ngram, n)
 # LDA
-lda2 <- LDA(artists_dtm, k=2, control=list(seed=666))
+foreach (k=seq(2,10,by=2), .packages=c('magrittr', 'dplyr', 'tidytext', 'topicmodels', 'ggplot2')) %dopar% {
+    lda <- LDA(song.words.dtm, k=k, control=list(seed=evil.seed))
+    plot_beta_spread(lda, 10)
+    ggsave(paste0('dump/lda_song_word_k', k, '.png'), dpi='retina')
+}
 
-lda2_beta_spread <- plot_beta_spread(lda2, 10)
-ggsave('dump/lda2_beta_spread.png', lda2_beta_spread)
+# By artist
+artist.words.count <- count(words, ngram, artist_id)
+artist.words.dtm <- cast_dtm(artist.words.count, artist_id, ngram, n)
+foreach (k=seq(2,10,by=2), .packages=c('magrittr', 'dplyr', 'tidytext', 'topicmodels', 'ggplot2')) %dopar% {
+    lda <- LDA(artist.words.dtm, k=k, control=list(seed=evil.seed))
+    plot_beta_spread(lda, 10)
+    ggsave(paste0('dump/lda_artist_word_k', k, '.png'), dpi='retina')
+}
 
 
-###################
-# Bigrams
-bigrams <- count_ngrams(lyrics, n=2)
-bigram_counts <- count(bigrams, ngram, song_id)
-
-bigrams_dtm <- cast_dtm(bigram_counts, song_id, ngram, n)
-lda3 <- LDA(bigrams_dtm, k=4, control=list(seed=666))
-
-lda3_beta_spread <- plot_beta_spread(lda3, 10)
-ggsave('dump/lda3_beta_spread.png', lda3_beta_spread)
+stopCluster(cl)
 
