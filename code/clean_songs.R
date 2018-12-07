@@ -3,7 +3,13 @@
 library(qdapTools)
 suppressMessages(library(tidyverse))
 
-songs <- readr::read_csv('data/songData_combined.csv', locale = locale(encoding = 'LATIN1'))
+songs <- readr::read_csv('data/songData_combined.csv', locale=locale(encoding='LATIN1'))
+if (file.exists('data/songData_combined_mac.csv')) {
+  songs2 <- readr::read_csv('data/songData_combined_mac.csv', local=locale(encoding='LATIN1'))
+  songs <- rbind(songs, songs2)
+  rm(songs2)
+  gc()
+}
 
 songs_clean <- songs %>%
   # Remove NA lyrics
