@@ -4,7 +4,7 @@ source('code/library_text.r')
 
 
 evil.seed <- 666
-cl <- register_parallel()
+# cl <- register_parallel()
 # Read cleaned, combined data
 raw <- read_csv('data/songs_cleaned.csv')
 lyrics <- raw %>%
@@ -34,21 +34,37 @@ song.words.count <- count(words, ngram, song_id)
 # cast to dtm
 song.words.dtm <- cast_dtm(song.words.count, song_id, ngram, n)
 # LDA
-foreach (k=seq(2,10,by=2), .packages=c('magrittr', 'dplyr', 'tidytext', 'topicmodels', 'ggplot2')) %dopar% {
-    lda <- LDA(song.words.dtm, k=k, control=list(seed=evil.seed))
-    plot_beta_spread(lda, 10)
-    ggsave(paste0('dump/lda_song_word_k', k, '.png'), dpi='retina')
+if (exists(cl)) {
+    foreach (k=seq(2,10,by=2), .packages=c('magrittr', 'dplyr', 'tidytext', 'topicmodels', 'ggplot2')) %dopar% {
+        lda <- LDA(song.words.dtm, k=k, control=list(seed=evil.seed))
+        plot_beta_spread(lda, 10)
+        ggsave(paste0('dump/lda_song_word_k', k, '.png'), dpi='retina')
+    }
+} else {
+    for (k in seq(2,10,by=2)) {
+        lda <- LDA(song.words.dtm, k=k, control=list(seed=evil.seed))
+        plot_beta_spread(lda, 10)
+        ggsave(paste0('dump/lda_song_word_k', k, '.png'), dpi='retina')
+    }
 }
 
 # By artist
 artist.words.count <- count(words, ngram, artist_id)
 artist.words.dtm <- cast_dtm(artist.words.count, artist_id, ngram, n)
-foreach (k=seq(2,10,by=2), .packages=c('magrittr', 'dplyr', 'tidytext', 'topicmodels', 'ggplot2')) %dopar% {
-    lda <- LDA(artist.words.dtm, k=k, control=list(seed=evil.seed))
-    plot_beta_spread(lda, 10)
-    ggsave(paste0('dump/lda_artist_word_k', k, '.png'), dpi='retina')
+if (exists(cl)) {
+    foreach (k=seq(2,10,by=2), .packages=c('magrittr', 'dplyr', 'tidytext', 'topicmodels', 'ggplot2')) %dopar% {
+        lda <- LDA(artist.words.dtm, k=k, control=list(seed=evil.seed))
+        plot_beta_spread(lda, 10)
+        ggsave(paste0('dump/lda_artist_word_k', k, '.png'), dpi='retina')
+    }
+} else {
+    for (k in seq(2,10,by=2)) {
+        lda <- LDA(artist.words.dtm, k=k, control=list(seed=evil.seed))
+        plot_beta_spread(lda, 10)
+        ggsave(paste0('dump/lda_artist_word_k', k, '.png'), dpi='retina')
+    }
 }
 
 
-stopCluster(cl)
+try(stopCluster(cl), silent=TRUE)
 
