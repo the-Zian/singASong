@@ -3,7 +3,9 @@
 source('code/library_text.r')
 
 
+# LDA Settings
 evil.seed <- 666
+ks <- seq(2, 10, by=2)
 # cl <- register_parallel()
 # Read cleaned, combined data
 raw <- read_csv('data/songs_cleaned.csv')
@@ -35,16 +37,18 @@ song.words.count <- count(words, ngram, song_id)
 song.words.dtm <- cast_dtm(song.words.count, song_id, ngram, n)
 # LDA
 if (exists('cl')) {
-    foreach (k=seq(2,10,by=2), .packages=c('magrittr', 'dplyr', 'tidytext', 'topicmodels', 'ggplot2')) %dopar% {
+    foreach (k=ks, .packages=c('magrittr', 'dplyr', 'tidytext', 'topicmodels', 'ggplot2')) %dopar% {
         lda <- LDA(song.words.dtm, k=k, control=list(seed=evil.seed))
-        plot_beta_spread(lda, 10)
-        ggsave(paste0('dump/lda_song_word_k', k, '.png'), dpi='retina')
+        p <- plot_beta_spread(lda, n=10)
+        p.file <- paste0('dump/lda_song_word_k', k, '.png')
+        ggsave(p.file, p, dpi=320)
+        print(paste0('Saved lda_song_word_k', k))
     }
 } else {
-    for (k in seq(2,10,by=2)) {
-        lda <- LDA(song.words.dtm, k=k, control=list(seed=evil.seed))
+    for (k in ks) {
+        lda <- LDA(song.words.dtm, k=k, control=list(seed=666))
         plot_beta_spread(lda, 10)
-        ggsave(paste0('dump/lda_song_word_k', k, '.png'), dpi='retina')
+        ggsave(paste0('dump/lda_song_word_k', k, '.png'), dpi=320)
     }
 }
 
@@ -52,16 +56,18 @@ if (exists('cl')) {
 artist.words.count <- count(words, ngram, artist_id)
 artist.words.dtm <- cast_dtm(artist.words.count, artist_id, ngram, n)
 if (exists('cl')) {
-    foreach (k=seq(2,10,by=2), .packages=c('magrittr', 'dplyr', 'tidytext', 'topicmodels', 'ggplot2')) %dopar% {
-        lda <- LDA(artist.words.dtm, k=k, control=list(seed=evil.seed))
-        plot_beta_spread(lda, 10)
-        ggsave(paste0('dump/lda_artist_word_k', k, '.png'), dpi='retina')
+    foreach (k=ks, .packages=c('magrittr', 'dplyr', 'tidytext', 'topicmodels', 'ggplot2')) %dopar% {
+        lda <- LDA(artist.words.dtm, k=k, control=list(seed=666))
+        p <- plot_beta_spread(lda, n=10)
+        p.file <- paste0('dump/lda_artist_word_k', k, '.png')
+        ggsave(p.file, p, dpi=320)
+        print(paste0('Saved lda_artist_word_k', k))
     }
 } else {
     for (k in seq(2,10,by=2)) {
         lda <- LDA(artist.words.dtm, k=k, control=list(seed=evil.seed))
         plot_beta_spread(lda, 10)
-        ggsave(paste0('dump/lda_artist_word_k', k, '.png'), dpi='retina')
+        ggsave(paste0('dump/lda_artist_word_k', k, '.png'), dpi=320)
     }
 }
 
