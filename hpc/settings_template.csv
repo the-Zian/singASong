@@ -1,0 +1,6 @@
+# NOTE: !This is a template only. Set all values, save as settings.csv, delete this line!
+setting, value
+user, nyu_netid
+ngrams, 2
+word, TRUE
+artist, TRUE

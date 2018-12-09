@@ -3,7 +3,7 @@ data/
 diagnostics/
 dump/
 .DS_Store
-
+hpc/settings.csv
 
 # History files
 .Rhistory
