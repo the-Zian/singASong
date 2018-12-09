@@ -6,7 +6,8 @@ source('code/library_text.r')
 # LDA Settings
 evil.seed <- 666
 ks <- seq(2, 10, by=2)
-# cl <- register_parallel()
+
+cl <- register_parallel()
 # Read cleaned, combined data
 raw <- read_csv('data/songs_cleaned.csv')
 lyrics <- raw %>%
