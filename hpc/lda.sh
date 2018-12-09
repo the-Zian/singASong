@@ -19,7 +19,7 @@ cd $PROJDIR
 
 # Model settings
 NGRAMS=$(cat hpc/settings.csv | awk 'FNR==3 {print $2}')
-SONG=$(cat hpc/settings.csv | awk 'FNR==4 {print $3}')
-ARTIST=$(cat hpc/settings.csv | awk 'FNR==5 {print $4}')
+SONG=$(cat hpc/settings.csv | awk 'FNR==4 {print $2}')
+ARTIST=$(cat hpc/settings.csv | awk 'FNR==5 {print $2}')
 
 Rscript $PROJDIR/code/lda.r
