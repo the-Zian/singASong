@@ -2,8 +2,8 @@
 #SBATCH --nodes=16
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=1
-#SBATCH --time=5:00:00
-#SBATCH --mem=32GB
+#SBATCH --time=4:00:00
+#SBATCH --mem=56GB
 #SBATCH --job-name=LDA
 #SBATCH --mail-type=END
 #SBATCH --mail-user=alanzchen@nyu.edu
