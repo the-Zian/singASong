@@ -14,6 +14,6 @@ module load r/intel/3.4.2
 RUNDIR=$SCRATCH/singASong/run-${SLURM_JOB_ID/.*}
 mkdir -p $RUNDIR
   
-PROJDIR=home/azc211/singASong
+PROJDIR=/home/azc211/singASong
 cd $PROJDIR
 Rscript $PROJDIR/code/lda.r
