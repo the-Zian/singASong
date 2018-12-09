@@ -34,7 +34,7 @@ song.words.count <- count(words, ngram, song_id)
 # cast to dtm
 song.words.dtm <- cast_dtm(song.words.count, song_id, ngram, n)
 # LDA
-if (exists(cl)) {
+if (exists('cl')) {
     foreach (k=seq(2,10,by=2), .packages=c('magrittr', 'dplyr', 'tidytext', 'topicmodels', 'ggplot2')) %dopar% {
         lda <- LDA(song.words.dtm, k=k, control=list(seed=evil.seed))
         plot_beta_spread(lda, 10)
@@ -51,7 +51,7 @@ if (exists(cl)) {
 # By artist
 artist.words.count <- count(words, ngram, artist_id)
 artist.words.dtm <- cast_dtm(artist.words.count, artist_id, ngram, n)
-if (exists(cl)) {
+if (exists('cl')) {
     foreach (k=seq(2,10,by=2), .packages=c('magrittr', 'dplyr', 'tidytext', 'topicmodels', 'ggplot2')) %dopar% {
         lda <- LDA(artist.words.dtm, k=k, control=list(seed=evil.seed))
         plot_beta_spread(lda, 10)
