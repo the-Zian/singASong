@@ -16,4 +16,4 @@ mkdir -p $RUNDIR
   
 PROJDIR=home/azc211/singASong
 cd $PROJDIR
-rscript $PROJDIR/code/lda.r
+Rscript $PROJDIR/code/lda.r
