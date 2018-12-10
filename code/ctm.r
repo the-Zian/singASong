@@ -8,7 +8,7 @@ source('code/library_text.r')
 
 # LDA Settings
 bad.seed <- 666
-ks <- seq(2, 10, by=2)
+ks <- seq(4, 10, by=2)
 
 cl <- register_parallel()
 # Read cleaned, combined data
@@ -51,6 +51,7 @@ if (exists('cl')) {
     }
 }
 
+if (FALSE) {
 # By artist
 artist.words.count <- count(words, ngram, artist_id)
 artist.words.dtm <- cast_dtm(artist.words.count, artist_id, ngram, n)
@@ -64,6 +65,6 @@ if (exists('cl')) {
         ggsave(paste0('dump/ctm_artist_word_k', k, '.png'), p, dpi=320)
     }
 }
-
+}
 
 try(stopCluster(cl), silent=TRUE)

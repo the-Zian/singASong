@@ -1,7 +1,7 @@
 #!/bin/bash
-#SBATCH --nodes=16
+#SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
-#SBATCH --cpus-per-task=1
+#SBATCH --cpus-per-task=16
 #SBATCH --time=4:00:00
 #SBATCH --mem=64GB
 #SBATCH --job-name=LDA
