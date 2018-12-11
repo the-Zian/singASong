@@ -92,7 +92,7 @@ if (ARTIST) {
         artist.words.dtm <- cast_dtm(artist.words.count, artist_id, ngram, n)
         saveRDS(artist.words.dtm, file=artist_dtm)
     } else {
-        artist_words.dtm <- readRDS(artist_dtm)
+        artist.words.dtm <- readRDS(artist_dtm)
     }
 
     # Filename stubs for model outputs
@@ -103,7 +103,7 @@ if (ARTIST) {
     cl <- register_parallel()
 
     foreach (k=ks, .packages=c('magrittr', 'dplyr', 'tidytext', 'topicmodels', 'ggplot2')) %dopar% {
-        lda <- LDA(song.words.dtm, k=k, control=list(seed=bad.seed))
+        lda <- LDA(artist.words.dtm, k=k, control=list(seed=bad.seed))
         # Save LDA model
         saveRDS(object=lda, file=paste0(model_stub, k, '.rds'))
         # Save beta spread plot
