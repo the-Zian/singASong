@@ -44,7 +44,7 @@ if (exists('cl')) {
     foreach (k=ks, .packages=c('magrittr', 'dplyr', 'tidytext', 'topicmodels', 'ggplot2')) %dopar% {
         ctm <- CTM(song.words.dtm, k=k, control=list(seed=bad.seed))
 
-        saveRDS(object=ctm, file=paste0('data/model/ctm_song_word_k', k, '.rds'))
+        saveRDS(object=ctm, file=paste0('models/ctm/ctm_song_word_k', k, '.rds'))
         
         p <- plot_beta_spread(ctm, n=10)
         ggsave(paste0('dump/ctm_song_word_k', k, '.png'), p, dpi=320)
@@ -59,7 +59,7 @@ if (exists('cl')) {
     foreach (k=ks, .packages=c('magrittr', 'dplyr', 'tidytext', 'topicmodels', 'ggplot2')) %dopar% {
         ctm <- CTM(artist.words.dtm, k=k, control=list(seed=bad.seed))
         
-        saveRDS(object=ctm, file=paste0('data/model/ctm_artist_word_k', k, '.rds'))
+        saveRDS(object=ctm, file=paste0('models/ctm/ctm_artist_word_k', k, '.rds'))
 
         p <- plot_beta_spread(ctm, n=10)
         ggsave(paste0('dump/ctm_artist_word_k', k, '.png'), p, dpi=320)
