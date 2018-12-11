@@ -10,7 +10,11 @@ library(doParallel)
 
 # GLOBALS
 data(stop_words)
-stop_words <- rbind(stop_words, data.frame(word=tm::stopwords('spanish'), lexicon='tm::spanish'))
+stop_words <- rbind(stop_words,
+    data.frame(word=tm::stopwords('spanish'), lexicon='tm::spanish'),
+    data.frame(word=stopwords('french'), lexicon='tm::french'),
+    data.frame(word=stopwords('portuguese'), lexicon='tm::portuguese')
+    )
 
 
 # FUNCTIONS
@@ -28,22 +32,23 @@ register_parallel <- function(num_cores=NA) {
 }
 
 
-unnest_ngrams <- function(dt, n=2, spanish=TRUE, stopWords=stop_words) {
+unnest_ngrams <- function(dt, n=2, english=FALSE, stopWords=stop_words) {
     # Unnest ngrams
     # Remove stop words
     # Remove punctuation
 
     word_vars <- c(paste0('word', (1:n)))
 
-    if (spanish) {
-        stops <- stopWords
+    if (english) {
+        stops <- stopWords %>% filter(!grepl('tm', lexicon))
     } else {
-        stops <- stopWords %>% filter(lexicon!='tm::spanish')
+        stops <- stopWords
     }
 
     dt <- dt %>%
         unnest_tokens(ngram, lyrics, token='ngrams', n=n) %>%
         separate(ngram, word_vars, sep=' ') %>%
+        mutate_at(.vars=word_vars, .fun=tolower) %>%
         filter_at(.vars=word_vars, .vars_predicate=any_vars(!. %in% stops$word)) %>%
         mutate_at(.vars=word_vars, .funs=gsub, pattern='[[:punct:]]', replacement=NA) %>%
         drop_na(!!word_vars) %>%
