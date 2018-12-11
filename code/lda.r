@@ -5,9 +5,9 @@ start_time <- Sys.time()
 # Parse user args
 userArgs <- commandArgs(trailingOnly=TRUE)
 # Hardcode userArgs until properly setup to be passed in
-NGRAMS <- userArgs[[1]]
-SONG <- userArgs[[2]]
-ARTIST <- userArgs[[3]]
+NGRAMS <- as.numeric(userArgs[[1]])
+SONG <- as.logical(userArgs[[2]])
+ARTIST <- as.logical(userArgs[[3]])
 
 source('code/library_text.r')
 
