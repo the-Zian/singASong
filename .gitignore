@@ -2,7 +2,7 @@ code/scratchpad.R
 data/
 diagnostics/
 dump/
-model/
+models/
 .DS_Store
 hpc/settings.csv
 
