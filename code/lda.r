@@ -62,7 +62,7 @@ if (SONG) {
 
     # Filename stubs for model outputs
     model_stub <- paste0('models/lda/lda_song_ngram', NGRAMS, '_k')
-    plot_stub <- paaste0('dump/lda_song_ngram', NGRAMS, '_k')
+    plot_stub <- paste0('dump/lda_song_ngram', NGRAMS, '_k')
 
     # LDA Modeling
     cl <- register_parallel()
