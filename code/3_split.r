@@ -1,6 +1,6 @@
 # Purpose: Split 70/30 train/test for classification models
 
-suppressMessages(library(tidyverse))
+source('code/library_text.r')
 
 clean <- read_csv('data/songs_cleaned.csv')
 
