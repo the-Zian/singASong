@@ -9,7 +9,7 @@ clean <- read_csv('data/songs_cleaned.csv')
 
 # DTM
 # Unnest tokens by NGRAMS
-tokens <- unnest_ngrams(train, n=NGRAMS)
+tokens <- unnest_ngrams(clean, n=NGRAMS)
 
 # Additional cleaning on unnested tokens
 # Remove numeric "tokens" greater than one digit
