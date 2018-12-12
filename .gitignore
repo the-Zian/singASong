@@ -5,6 +5,8 @@ dump/
 models/
 .DS_Store
 hpc/settings.csv
+code/test.r
+hpc/test.sh
 
 # History files
 .Rhistory
