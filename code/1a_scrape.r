@@ -96,7 +96,7 @@ song_styles_cleaned <- clean_genreStyles(song_styles)
 
 ###################
 # Compile
-source('code/compile.r')
+source('code/1b_compile.r')
 
 
 end <- Sys.time()
