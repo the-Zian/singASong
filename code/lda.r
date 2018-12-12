@@ -13,7 +13,7 @@ source('code/library_text.r')
 
 # LDA Settings
 bad.seed <- 666
-ks <- seq(4, 20, by=4)
+ks <- seq(30, 100, by=10)
 
 ###################
 # Format data for LDA (unnest, cast to dtm)
