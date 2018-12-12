@@ -79,7 +79,8 @@ plot_beta_spread <- function(lda, n) {
         facet_wrap(~ topic, scale='free') +
         coord_flip() +
         scale_x_continuous(breaks=top_terms$plot_order, labels=top_terms$term, expand=c(0,0)) +
-        theme_minimal()
+        theme_minimal() +
+        theme(axis.text=element_text(size=8))
 
     return(p)
 }
