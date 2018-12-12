@@ -19,7 +19,7 @@ ks <- c(20, 30, 40, 50)
 ###################
 # Count tokens within song
 if (SONG) {
-    song.words.dtm <- readRDS('data/inputs/lda/songs_n', NGRAMS, '.rds')
+    song.words.dtm <- readRDS('data/inputs/songs_n', NGRAMS, '.rds')
     }
 
     # Filename stubs for model outputs

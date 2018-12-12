@@ -25,4 +25,4 @@ tokens.count <- count(tokens, ngram, song_id)
 tokens.dtm <- cast_dtm(tokens.count, song_id, ngram, n)
 
 # Save full dtm
-saveRDS(tokens.dtm, file=paste0('data/inputs/lda/songs_n', NGRAMS, '_dtm.rds'))
+saveRDS(tokens.dtm, file=paste0('data/inputs/songs_n', NGRAMS, '_dtm.rds'))
