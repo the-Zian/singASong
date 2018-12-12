@@ -14,7 +14,5 @@ clean_words <- unnest_ngrams(clean, n = 1)
 train <- clean[train.idx,]
 test <- clean[test.idx,]
 
-
-
 saveRDS(train, 'data/inputs/train.rds')
 saveRDS(test, 'data/inputs/test.rds')
