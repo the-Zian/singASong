@@ -42,11 +42,7 @@ songs_clean <- songs %>%
          decade=floor(year/10)*10) %>%
   
   select(artist, year, decade, album, title, genre, genre_lower, style, style_lower, lyrics, url, scrape_dt) %>%
-<<<<<<< HEAD
-  
-=======
 
->>>>>>> cad88e1b8b1b9b8d594da50b53ce6df01106cc46
   # Generate ids
   mutate(song_id=row_number()) %>%
   group_by(artist) %>%
