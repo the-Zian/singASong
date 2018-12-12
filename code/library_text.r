@@ -17,6 +17,7 @@ stop_words <- rbind(stop_words,
     data.frame(word=stopwords('french'), lexicon='tm::french'),
     data.frame(word=stopwords('portuguese'), lexicon='tm::portuguese'),
     data.frame(word=stopwords('italian'), lexicon='tm::italian'),
+    data.frame(word=stopwords('german'), lexicon='tm::german'),
     song_stops
     )
 
