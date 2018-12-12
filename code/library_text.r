@@ -10,12 +10,14 @@ library(doParallel)
 
 # GLOBALS
 data(stop_words)
+song_stops <- read_csv('data/inputs/song_stops.csv')
+song_stops$lexicon <- 'custom'
 stop_words <- rbind(stop_words,
     data.frame(word=tm::stopwords('spanish'), lexicon='tm::spanish'),
     data.frame(word=stopwords('french'), lexicon='tm::french'),
     data.frame(word=stopwords('portuguese'), lexicon='tm::portuguese'),
     data.frame(word=stopwords('italian'), lexicon='tm::italian'),
-    data.frame(word=stopwords('german'), lexicon='tm::italian')
+    song_stops
     )
 
 
