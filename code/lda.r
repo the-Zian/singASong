@@ -8,6 +8,7 @@ userArgs <- commandArgs(trailingOnly=TRUE)
 NGRAMS <- as.numeric(userArgs[[1]])
 SONG <- as.logical(userArgs[[2]])
 ARTIST <- as.logical(userArgs[[3]])
+TRAIN <- as.logical(userArgs[[4]])
 
 source('code/library_text.r')
 
@@ -22,8 +23,8 @@ unnested_data <- paste0('data/inputs/unnested_n', NGRAMS, '.rds')
 
 if (!file.exists(unnested_data)) {
     # Read cleaned, combined data
-    raw <- read_csv('data/songs_cleaned.csv')
-    lyrics <- raw %>%
+    clean <- readRDS('data/input/train.rds')
+    lyrics <- clean %>%
     mutate(decade=floor(year/10)*10)
     # Create ids
     lyrics <- lyrics %>%
