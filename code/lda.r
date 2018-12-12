@@ -8,7 +8,6 @@ userArgs <- commandArgs(trailingOnly=TRUE)
 NGRAMS <- as.numeric(userArgs[[1]])
 SONG <- as.logical(userArgs[[2]])
 ARTIST <- as.logical(userArgs[[3]])
-TRAIN <- as.logical(userArgs[[4]])
 
 source('code/library_text.r')
 
