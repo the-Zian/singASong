@@ -38,9 +38,16 @@ songs_clean <- songs %>%
   mutate(genre_lower = paste0("genre.", gsub("&amp;|/|[[:space:]]|,|-|'", '', tolower(genre))),
          genre_lower = gsub("\\|", "\\|genre.", genre_lower),
          style_lower = paste0("style.", gsub("&amp;|/|[[:space:]]|,|-|'", '', tolower(style))),
-         style_lower = gsub("\\|", "\\|style.", style_lower)) %>%
+         style_lower = gsub("\\|", "\\|style.", style_lower),
+         decade=floor(year/10)*10) %>%
   
-  dplyr::select(artist, year, album, title, genre, genre_lower, style, style_lower, lyrics, url, scrape_dt)
+  select(artist, year, decade, album, title, genre, genre_lower, style, style_lower, lyrics, url, scrape_dt) %>%
+  
+  # Generate ids
+  mutate(song_id=row_number()) %>%
+  group_by(artist) %>%
+  mutate(artist_id=as.numeric(as.factor(artist))) %>%
+  ungroup()
 
 # One-hot encode genres
 genre_dummies <- qdapTools::mtabulate(str_split(songs_clean$genre_lower, '\\|'))
