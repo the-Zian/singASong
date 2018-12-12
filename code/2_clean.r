@@ -41,7 +41,7 @@ songs_clean <- songs %>%
          style_lower = gsub("\\|", "\\|style.", style_lower),
          decade=floor(year/10)*10) %>%
   
-  dplyr::select(artist, year, decade, album, title, genre, genre_lower, style, style_lower, lyrics, url, scrape_dt)
+  select(artist, year, decade, album, title, genre, genre_lower, style, style_lower, lyrics, url, scrape_dt) %>%
 
   # Generate ids
   mutate(song_id=row_number()) %>%
