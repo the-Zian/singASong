@@ -4,3 +4,4 @@ user, nyu_netid
 ngrams, 2
 song, TRUE
 artist, TRUE
+train, TRUE
