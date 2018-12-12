@@ -1,23 +1,11 @@
-# Purpose: Split clean data into 70/30 train/test for logistic regression, cast full clean to dtm for lda
+# Purpose: Cast full clean to dtm for lda
 
 userArgs <- commandArgs(trailingOnly=TRUE)
 NGRAMS <- as.numeric(userArgs[[1]])
 
 source('code/library_text.r')
 
-
 clean <- read_csv('data/songs_cleaned.csv')
-
-set.seed(666)
-# Split 70/30 train/test
-train.idx <- sample(1:nrow(clean), size=0.7*nrow(clean))
-test.idx <- which(!seq(nrow(clean)) %in% train.idx)
-
-train <- clean[train.idx,]
-test <- clean[test.idx,]
-
-saveRDS(train, 'data/inputs/train.rds')
-saveRDS(test, 'data/inputs/test.rds')
 
 # DTM
 # Unnest tokens by NGRAMS
