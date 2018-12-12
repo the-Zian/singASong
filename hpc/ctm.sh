@@ -22,4 +22,10 @@ NGRAMS=$(cat hpc/settings.csv | awk 'FNR==3 {print $2}')
 SONG=$(cat hpc/settings.csv | awk 'FNR==4 {print $2}')
 ARTIST=$(cat hpc/settings.csv | awk 'FNR==5 {print $2}')
 
-Rscript $PROJDIR/code/ctm.r
+# Check for NGRAM specific DTM, create if not found
+if [ ! -e $PROJDIR/data/inputs/songs_n$NGRAMS_dtm.rds ]
+then
+    Rscript $PROJDIR/code/4a_cast_dtm.r $NGRAMS
+fi
+
+Rscript $PROJDIR/code/4b_ctm.r

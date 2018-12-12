@@ -1,9 +1,11 @@
-# Purpose: Split data into 70/30 train and test
+# Purpose: Split 70/30 train/test for classification models
 
-set.seed(666)
+suppressMessages(library(tidyverse))
 
 clean <- read_csv('data/songs_cleaned.csv')
 
+set.seed(666)
+# Split 70/30 train/test
 train.idx <- sample(1:nrow(clean), size=0.7*nrow(clean))
 test.idx <- which(!seq(nrow(clean)) %in% train.idx)
 
