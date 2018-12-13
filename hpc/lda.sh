@@ -26,6 +26,8 @@ ARTIST=$(cat hpc/settings.csv | awk 'FNR==5 {print $2}')
 if [ ! -e $PROJDIR/data/inputs/songs_n$NGRAMS_dtm.rds ]
 then
     Rscript $PROJDIR/code/4a_cast_dtm.r $NGRAMS
+    Rscript $PROJDIR/code/3a_cast_dtm.r $NGRAMS
 fi
 
 Rscript $PROJDIR/code/4b_lda.r $NGRAMS $SONG $ARTIST
+Rscript $PROJDIR/code/3b_lda.r $NGRAMS $SONG $ARTIST
