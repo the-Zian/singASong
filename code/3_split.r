@@ -2,7 +2,7 @@
 
 suppressMessages(library(tidyverse))
 
-clean <- read_csv('data/songs_cleaned.csv')
+clean <- read_csv('data/songs_cleaned.csv')[,1:30]
 
 set.seed(666)
 # Split 70/30 train/test
