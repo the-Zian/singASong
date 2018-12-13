@@ -123,11 +123,10 @@ for(i in 1:length(calibration_list)) {
 }
 calibration_tbl <- bind_rows(calibration_list)
 
-
 calibration_plot <- ggplot(calibration_tbl, aes(x = prob_round, y = prob_emp, size = n)) +
   geom_abline(intercept = 0, slope = 1) +
-  geom_point(aes(col = Genre), alpha = 0.9, show.legend = FALSE) +
-  scale_colour_manual(name = "Genre", values = as.character(tol18rainbow[genres9] %>% unlist()), labels = genre_labels[genres9], guide = FALSE) +
+  geom_point(aes(col = Genre), alpha = 0.5, show.legend = FALSE) +
+  scale_colour_manual(name = "Genre", values = tol18rainbow[genres9] %>% unlist(), labels = genre_labels[genres9], guide = FALSE) +
   facet_wrap(~Genre, labeller = labeller(Genre = genre9_labels)) +
   labs(title = "Model calibration by genre",
        subtitle = "K = 30 topics",
