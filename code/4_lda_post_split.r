@@ -6,7 +6,7 @@ library(topicmodels)
 
 # Read in LDA model objects
 ks <- seq(5) * 10
-lda_rds <- paste0('models/lda/', ks, '.rds')
+lda_rds <- paste0('models/lda/lda_song_ngram1_k', ks, '.rds')
 ldas <- lapply(lda_rds, readRDS)
 gammas <- vector('list', length(ks))
 # Pull posterior gammas, cbind song ids
