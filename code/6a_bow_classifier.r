@@ -2,7 +2,7 @@
 
 
 source('code/library_text.r')
-library(glue)
+source('code/library_model.r')
 
 
 # Read in clean
@@ -30,15 +30,14 @@ genre_dtm <- cast_dtm(genre_words, document=genre_id, term=ngram, value=n, weigh
 # Define features
 genre_dtm_tidy <- tidy(genre_dtm)
 
-# no need to save
-saveRDS(genre_dtm_tidy, file='data/inputs/genre_dtm.rds')
 
 # Find top words per genre
 
 # UNIT-TEST: n=10
 genre_features <- genre_dtm_tidy %>% group_by(document) %>%
     arrange(desc(count)) %>%
-    slice(1:10)
+    slice(1:10) %>%
+    plyr::rename(document=genre_id)
 
 # Tf-Idf by songs
 song_tokens <- unnest_ngrams(clean, n=1) %>%
@@ -46,11 +45,11 @@ song_tokens <- unnest_ngrams(clean, n=1) %>%
 song_tfidf_dtm <- cast_dtm(song_tokens, document=song_id, term=ngram, value=n, weighting=tm::weightTfIdf)
 song_dtm_tidy <- tidy(song_tfidf_dtm)
 
-# Inner join top feature tokens
-song_features <- inner_join(song_dtm_tidy, genre_features[, 'term'], by='term')
+# Inner join top feature tokens, spread wide
+song_features <- left_join(song_dtm_tidy, genre_features[, 'term'], by='term') %>%
+    distinct() %>%
+    spread(term, count, fill=0)
 
-# duplciates in song_features
-# inner_join causing duplicates?
-
-
+# Join on genre dummies
+song_feaures %>% left_join
 
