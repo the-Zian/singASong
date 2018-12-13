@@ -25,9 +25,32 @@ genre_words <- unnest_ngrams(genre_corpus, n=1)
 genre_words <- count(genre_words, ngram, genre_id)
 
 # Cast to tf-idf dtm
-genre_dtm <- cast_dtm(genre_words, document=genre_id, term=ngram, value=n)
+genre_dtm <- cast_dtm(genre_words, document=genre_id, term=ngram, value=n, weighting=tm::weightTfIdf)
 
 # Define features
 genre_dtm_tidy <- tidy(genre_dtm)
 
+# no need to save
 saveRDS(genre_dtm_tidy, file='data/inputs/genre_dtm.rds')
+
+# Find top words per genre
+
+# UNIT-TEST: n=10
+genre_features <- genre_dtm_tidy %>% group_by(document) %>%
+    arrange(desc(count)) %>%
+    slice(1:10)
+
+# Tf-Idf by songs
+song_tokens <- unnest_ngrams(clean, n=1) %>%
+    count(ngram, song_id)
+song_tfidf_dtm <- cast_dtm(song_tokens, document=song_id, term=ngram, value=n, weighting=tm::weightTfIdf)
+song_dtm_tidy <- tidy(song_tfidf_dtm)
+
+# Inner join top feature tokens
+song_features <- inner_join(song_dtm_tidy, genre_features[, 'term'], by='term')
+
+# duplciates in song_features
+# inner_join causing duplicates?
+
+
+
