@@ -25,7 +25,7 @@ ARTIST=$(cat hpc/settings.csv | awk 'FNR==5 {print $2}')
 # Check for NGRAM specific DTM, create if not found
 if [ ! -e $PROJDIR/data/inputs/songs_n$NGRAMS_dtm.rds ]
 then
-    Rscript $PROJDIR/code/4a_cast_dtm.r $NGRAMS
+    Rscript $PROJDIR/code/3a_cast_dtm.r $NGRAMS
 fi
 
-Rscript $PROJDIR/code/4b_ctm.r
+Rscript $PROJDIR/code/3b_ctm.r
