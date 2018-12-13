@@ -19,7 +19,7 @@ for (i in 1:length(ks)) {
 gammas <- lapply(gammas, function(df) {names(df)[1] <- 'song_id'; return(df)})
 
 # Merge gammas with cleaned data
-clean <- readRDS('data/songs_cleaned.csv')
+clean <- read_csv('data/songs_cleaned.csv')
 datas <- lapply(gammas, function(df) {
     df <- left_join(clean, df, by='song_id')
 })
