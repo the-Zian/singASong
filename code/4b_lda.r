@@ -22,23 +22,23 @@ if (SONG) {
     song.words.dtm <- readRDS(paste0('data/inputs/songs_n', NGRAMS, '_dtm.rds'))
     }
 
-    # Filename stubs for model outputs
-    model_stub <- paste0('models/lda/lda_song_ngram', NGRAMS, '_k')
-    plot_stub <- paste0('dump/lda_song_ngram', NGRAMS, '_k')
+# Filename stubs for model outputs
+model_stub <- paste0('models/lda/lda_song_ngram', NGRAMS, '_k')
+plot_stub <- paste0('dump/lda_song_ngram', NGRAMS, '_k')
 
-    # LDA Modeling
-    cl <- register_parallel()
+# LDA Modeling
+cl <- register_parallel()
 
-    foreach (k=ks, .packages=c('magrittr', 'dplyr', 'tidytext', 'topicmodels', 'ggplot2')) %dopar% {
-        lda <- LDA(song.words.dtm, k=k, control=list(seed=bad.seed))
-        # Save LDA model
-        saveRDS(object=lda, file=paste0(model_stub, k, '.rds'))
-        # Save beta spread plot
-        p <- plot_beta_spread(lda, n=15)
-        ggsave(paste0(plot_stub, k, '.png'), p, dpi=320)
-    }
-
-    try(stopCluster(cl), silent=TRUE)
+foreach (k=ks, .packages=c('magrittr', 'dplyr', 'tidytext', 'topicmodels', 'ggplot2')) %dopar% {
+     
+    lda <- LDA(song.words.dtm, k=k, control=list(seed=bad.seed))
+    # Save LDA model
+    saveRDS(object=lda, file=paste0(model_stub, k, '.rds'))
+    # Save beta spread plot
+    p <- plot_beta_spread(lda, n=15)
+    ggsave(paste0(plot_stub, k, '.png'), p, dpi=320)
 }
+
+try(stopCluster(cl), silent=TRUE)
 
 print(Sys.time() - start_time)
