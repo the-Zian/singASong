@@ -1,8 +1,3 @@
-library(tidytext)
-library(tidyverse)
-library(tm)
-library(topicmodels)
-
 ks <- (1:5)*10
 lda_list <- gamma_list <- vector("list", 5)
 
@@ -11,26 +6,21 @@ for(i in 1:length(ks)) {
   gamma_list[[i]] <- lda_list[[i]]@gamma %>%
     as.data.frame %>%
     as.tbl()
+  gamma_list[[i]] <- cbind(lda_list[[i]]@documents %>% as.numeric(), gamma_list[[i]])
 }
 
-train <- train %>%
-  as.data.frame()
-train <- train[,c(1:27,416:417)] %>% as.tbl()
+gamma_list <- lapply(gamma_list, function(df) {names(df)[1] <- "song_id"; return(df)})
+data_list <- lapply(gamma_list, function(df) {df <- merge(clean, df, by = "song_id", all.x = TRUE) %>% as.tbl(); return(df)})
 
-train <- train %>%
-  as.data.frame()
-test <- test[,c(1:27,416:417)] %>% as.tbl()
+set.seed(666)
+train.idx <- sample(1:nrow(clean), size=0.7*nrow(clean))
+test.idx <- which(!seq(nrow(clean)) %in% train.idx)
 
-## Obtain gammas
-gamma_train <- lapply(gamma_list, function(gamma) gamma[train.idx,])
-gamma_test <- lapply(gamma_list, function(gamma) gamma[test.idx,])
-
-## Merge gammas 
-train_list <- lapply(gamma_train, function(df) bind_cols(train, df) %>% as.tbl())
-test_list <- lapply(gamma_test, function(df) bind_cols(test, df) %>% as.tbl())
+train_list <- lapply(data_list, function(df) df[train.idx,])
+test_list <- lapply(data_list, function(df) df[test.idx,])
 
 ## Run logistic regression models
-genres <- c("blues", "classical", "electronic", "folkworldcountry", "funksoul", "hiphop", "jazz", "latin", "pop", "reggae", "stagescreen")
+genres <- c("blues", "electronic", "folkworldcountry", "funksoul", "hiphop", "latin", "pop", "reggae", "rock")
 model_list <- vector("list", 5)
 for(i in 1:5) {
   model_list[[i]] <- vector("list", length(genres))
@@ -53,6 +43,64 @@ for(i in 1:5) {
   fit_list[[i]] <- lapply(model_list[[i]], extract_fit)
 }
 
-gamma_list[[1]]
+## Make predictions on test set
+pred_names <- paste0("prob.", genres)
 
-plot_beta_spread(lda_list[[1]], n = 10)
+for(i in 1:5) {
+  for(j in 1:length(genres)) {
+    test_list[[i]][, pred_names[j]] <- predict(model_list[[i]][[j]], newdata = test_list[[i]], type = "response")
+  }
+}
+
+## Model performance - AUC
+library(pROC)
+
+roc_list <- vector("list", 5)
+for(i in 1:5) {
+  roc_list[[i]] <- vector("list", length(genres))
+  for(j in 1:length(genres)) {
+    roc_list[[i]][[j]] <- roc(response = test_list[[i]][, paste0("genre.", genres[j])] %>% pull(1), predictor = test_list[[i]][, pred_names[j]] %>% pull(1))
+  }
+}
+
+## Functions for ROC plotting
+## Extract sensitivity and specificity from ROC objects
+makeROCtbl <- function(roc_obj) {
+  roc_tbl <- tibble(Sensitivity = roc_obj$sensitivities,
+                    Specificity = roc_obj$specificities)
+  roc_auc <- auc(roc_obj)
+  return_obj <- list(roc_tbl = roc_tbl, auc = roc_auc)
+  
+  return(return_obj)
+}
+
+## Create ROC curve
+ggplotROC <- function(roc_tbl_list, k_ind, genre_ind) {
+  genre <- genres[genre_ind]
+  k <- 10*k_ind
+  ggplot(roc_tbl_list[[k_ind]][[genre_ind]]$roc_tbl, aes(x = 1 - Specificity, y = Sensitivity)) +
+    geom_line() +
+    labs(title = paste0(genre, ", ", "K = ", k),
+         subtitle = paste0("AUC: ", roc_tbl_list[[k_ind]][[genre_ind]]$auc %>% round(3)))
+}
+
+roc_tbls <- vector("list", 5)
+for(i in 1:5) {
+  roc_tbls[[i]] <- lapply(roc_list[[i]], makeROCtbl)
+}
+
+library(gridExtra)
+
+## Homogeneity of topics
+library(reshape2)
+
+melted_k20 <- data_list[[2]] %>%
+  filter(artist == "Queen") %>%
+  dplyr::select(song_id, starts_with("V")) %>%
+  as.data.frame() %>%
+  melt(id.vars = "song_id", variable.name = "topic", value.name = "gamma") %>%
+  as.tbl()
+
+ggplot(melted_k20, aes(x = gamma, fill = topic)) +
+  geom_histogram(bins = 20) +
+  facet_wrap(~topic, scale = "free")
