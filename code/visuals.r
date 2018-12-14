@@ -17,12 +17,15 @@ songs <- read_csv('data/songs_cleaned.csv')
 # PLOTS
 theme_set(theme_minimal())
 
-genre_labels <- c('Blues', 'Brass/Military', 'Childrens', 'Electronic', 'Folk/World/Country', 'Funk/Soul', 'Hip-Hop', 
+genres_list <- c("blues", "brassmilitary", "childrens", "electronic", "folkworldcountry", "funksoul", "hiphop", "jazz", 
+                  "latin", "non", "non-music", "pop", "reggae", "rock", "stage_screen")
+genre_labels <- c('Blues', 'Brass/Military', 'Children\'s', 'Electronic', 'Folk/World/Country', 'Funk/Soul', 'Hip-Hop', 
                   'Jazz', 'Latin', 'None', 'Non-music', 'Pop', 'Reggae', 'Rock', 'Stage/Screen')
+names(genre_labels) <- genres_list
 
 tol18rainbow = list("#771155", "#AA4488", "#CC99BB", "#114477", "#4477AA", "#77AADD", "#117777", "#44AAAA", "#77CCCC", 
                     "#777711", "#AAAA44", "#DDDD77", "#774411", "#AA7744", "#DDAA77", "#771122", "#AA4455", "#DD7788")
-names(tol18rainbow)[1:6] <- genre_labels
+names(tol18rainbow) <- genre_labels
 
 
 # Stacked bar plot of genres by decade
@@ -120,10 +123,6 @@ for(i in 1:length(calibration_list)) {
   calibration_list[[i]] <- makeCalibration(test_list[[3]], genres9_list[i])
 }
 calibration_tbl <- bind_rows(calibration_list)
-
-tol18rainbow = list("#771155", "#AA4488", "#CC99BB", "#114477", "#4477AA", "#77AADD", "#117777", "#44AAAA", "#77CCCC", 
-                    "#777711", "#AAAA44", "#DDDD77", "#774411", "#AA7744", "#DDAA77", "#771122", "#AA4455", "#DD7788")
-names(tol18rainbow)[genres9] <- unique(calibration_tbl$Genre)
 
 calibration_plot <- ggplot(calibration_tbl, aes(x = prob_round, y = prob_emp, size = n)) +
   geom_abline(intercept = 0, slope = 1) +
