@@ -154,7 +154,7 @@ topic_genre_plots <- ggplot(topic_genre_tbl, aes(x = genre, y = gamma)) +
   geom_col(aes(fill = genre)) +
   scale_fill_manual(name = "Genre", values = tol18rainbow[genres9] %>% unlist(), labels = genre_labels[genres9]) +
   facet_wrap(~Topic, scales='free_y') +
-  theme(axis.text.x = element_blank(), axis.ticks.x = element_blank()) +
+  theme(axis.text.x=element_blank(), axis.ticks.x=element_blank(), axis.text.y=element_text(size=6)) +
   labs(title = "Genre distribution by topic",
        subtitle = "K = 30 topics",
        x = "", y = "")
