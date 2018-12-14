@@ -27,6 +27,7 @@ tol18rainbow = list("#771155", "#AA4488", "#CC99BB", "#114477", "#4477AA", "#77A
                     "#777711", "#AAAA44", "#DDDD77", "#774411", "#AA7744", "#DDAA77", "#771122", "#AA4455", "#DD7788")
 names(tol18rainbow) <- genre_labels
 
+
 # Stacked bar plot of genres by decade
 songs <- songs %>% mutate(decade=floor(year/10)*10)
 # Calculate number of genres per decade
