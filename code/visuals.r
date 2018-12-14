@@ -134,3 +134,28 @@ calibration_plot <- ggplot(calibration_tbl, aes(x = prob_round, y = prob_emp, si
        y = "Empirical probability")
 
 ggsave('report/calibration_k30.png', plot = calibration_plot, device = 'png', dpi = 320)
+
+# Topic-genre correspondence: topic distribution within genre
+topic_genre_list <- vector("list", 9)
+for(i in 1:length(topic_genre_list)) {
+  topic_genre_list[[i]] <- data_list[[3]] %>%
+    filter(grepl(genres9_list[i], genre_lower, ignore.case = TRUE)) %>%
+    summarise_at(vars(V1:V30), mean, na.rm = TRUE) %>%
+    mutate(genre = genre9_labels[i])
+}
+
+topic_genre_tbl <- bind_rows(topic_genre_list) %>%
+  reshape2::melt(id.vars = "genre", variable.name = "Topic", value.name = "gamma") %>%
+  as.tbl() %>%
+  mutate(Topic = gsub("V", "", Topic) %>% as.numeric)
+
+topic_genre_plots <- ggplot(topic_genre_tbl, aes(x = genre, y = gamma)) +
+  geom_col(aes(fill = genre)) +
+  scale_fill_manual(name = "Genre", values = tol18rainbow[genres9] %>% unlist(), labels = genre_labels[genres9]) +
+  facet_wrap(~Topic) +
+  theme(axis.text = element_blank(), axis.ticks = element_blank()) +
+  labs(title = "Genre distribution by topic",
+       subtitle = "K = 30 topics",
+       x = "", y = "")
+
+ggsave("report/genre_topic_distribution.png", topic_genre_plots, device = "png", dpi = 320)
