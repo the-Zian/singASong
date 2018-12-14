@@ -1,5 +1,5 @@
 # Sing A Song
-Supervised machine learning predictions from song lyrics. Final project for Messy Data & Machine Learning (NYU).
+Classifying song genres from Latent Dirichlet Allocation predicted topics.
 
 ### Authors
 Alan Chen & Mac Tan
@@ -7,24 +7,19 @@ Alan Chen & Mac Tan
 ### Date
 Fall 2018
 
-## Purpose / Research Questions
-The advent of readily available, scalable natural language processing (NLP) and supervised machine learning (ML) tools can unlock insights to curiosities in a wealth of text based domains. We believe, with the enduring popularity of music and singing in human cultures, we can begin to answer a host of questions to entertain and enlighten humanity. Given the lyrics of a song, consider:  
+## Code
+- library_scrape.r - functions for scraping data
+- library_text.r - functions for bag-of-words text processing
+- library_model.r - functions for modeling
+- 1a_scrape.r - scrape data from Lyrics.com
+- 1b_compile.r - compile scraped lyrics data and metadata into one csv
+- 1c_combine.r - combine all scraped data into one csv
+- 2_clean.r - clean combined scraped data
+- hpc/lda.sh - parallelized lda modeling
+    + 3a_cast_dtm.r - unnest cleaned data into tokens, cast to dtm
+    + 3b_lda.r - run LDA model on dtm
+- 4_lda_post_slit.r - merge LDA model posterior document-topic probability distributions with cleaned data
+- 5_lda_logistic.r - run logistic regression models using LDA document-topic probability features
+- visuals.r - generate plots/visuals for report
 
-* Predicting the genre  
-* Predicting the artist  
-* Predicting the recording year
-
-## Data
-There are several datasets of song lyrics with artist, genre, and other relevant features readily available on the web.
-
-**Sources**
-We scrape song lyrics from https://www.lyrics.com, an online song lyrics database with over 1.2 million songs tagged by genre. The site contains song lyrics as well as metadata on artist, album, song title, and year (for most songs).
-
-## Methods
-For feature engineering, we will begin with a bag-of-words model on the lyric text, and possibly explore additional deep learning alternatives.
-
-For genre classification and prediction, we plan to employ a variety of supervised ML techniques including, but not limited to:  
-
-* Logistic regression
-* Support vector machines (SVM)
-* Neural networks
+Note: scripts not described still in progress
