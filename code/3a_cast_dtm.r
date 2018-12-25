@@ -2,6 +2,8 @@
 
 userArgs <- commandArgs(trailingOnly=TRUE)
 NGRAMS <- as.numeric(userArgs[[1]])
+DOCUMENT <- as.character(userArgs[[2]])
+doc_id_var <- paste0(DOCUMENT, '_id')
 
 source('code/library_text.r')
 
@@ -18,11 +20,11 @@ one_digs <- grep('^[0-9]$', tokens$ngram)
 any_digs <- grep('[[:digit:]]', tokens$ngram)
 other_digs <- setdiff(any_digs, one_digs)
 tokens <- tokens[-other_digs,]
-# count tokens
-tokens.count <- count(tokens, ngram, song_id)
+# count tokens grouped by document
+tokens.count <- count(tokens, ngram, !!doc_id_var)
 
 # Cast to dtm
-tokens.dtm <- cast_dtm(tokens.count, song_id, ngram, n)
+tokens.dtm <- cast_dtm(tokens.count, !!doc_id_var, ngram, n)
 
 # Save full dtm
-saveRDS(tokens.dtm, file=paste0('data/inputs/songs_n', NGRAMS, '_dtm.rds'))
+saveRDS(tokens.dtm, file=paste0('data/inputs/', DOCUMENT, '_n', NGRAMS, '_dtm.rds'))

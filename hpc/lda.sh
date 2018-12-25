@@ -13,19 +13,27 @@ module purge
 module load r/intel/3.4.2
 RUNDIR=$SCRATCH/singASong/run-${SLURM_JOB_ID/.*}
 mkdir -p $RUNDIR
-  
-PROJDIR=/home/azc211/singASong
+
+# User directory
+NETID=$(cat hpc/settings.csv | awk 'FNR==2 {print $2}')
+PROJDIR=/home/$NETID/singASong
 cd $PROJDIR
 
 # Model settings
+# !TODO: Finish arg check for DOCUMENT
 NGRAMS=$(cat hpc/settings.csv | awk 'FNR==3 {print $2}')
-SONG=$(cat hpc/settings.csv | awk 'FNR==4 {print $2}')
-ARTIST=$(cat hpc/settings.csv | awk 'FNR==5 {print $2}')
+DOCUMENT=$(cat hpc/settings.csv | awk 'FNR=4 {print$2}')
 
-# Check for NGRAM specific DTM, create if not found
-if [ ! -e $PROJDIR/data/inputs/songs_n$NGRAMS_dtm.rds ]
+if [[ $DOCUMENT != 'artist' && $DOCUMENT != 'song' ]]
 then
-    Rscript $PROJDIR/code/3a_cast_dtm.r $NGRAMS
+    echo "DOCUMENT must be 'artist' or 'song'"
+    exit 1
 fi
 
-Rscript $PROJDIR/code/3b_lda.r $NGRAMS $SONG $ARTIST
+# Check for NGRAM specific DTM, create if not found
+if [ ! -e $PROJDIR/data/inputs/$DOCUMENT_n$NGRAMS_dtm.rds ]
+then
+    Rscript $PROJDIR/code/3a_cast_dtm.r $NGRAMS $DOCUMENT
+fi
+
+Rscript $PROJDIR/code/3b_lda.r $NGRAMS $DOCUMENT

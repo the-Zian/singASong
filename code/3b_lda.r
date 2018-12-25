@@ -6,8 +6,7 @@ start_time <- Sys.time()
 userArgs <- commandArgs(trailingOnly=TRUE)
 # Hardcode userArgs until properly setup to be passed in
 NGRAMS <- as.numeric(userArgs[[1]])
-SONG <- as.logical(userArgs[[2]])
-ARTIST <- as.logical(userArgs[[3]])
+DOCUMENT <- as.character(userArgs[[2]])
 
 source('code/library_text.r')
 
@@ -17,21 +16,19 @@ ks <- c(20, 30, 40, 50)
 
 
 ###################
-# Count tokens within song
-if (SONG) {
-    song.words.dtm <- readRDS(paste0('data/inputs/songs_n', NGRAMS, '_dtm.rds'))
-    }
+# Count tokens within document
+ngram.dtm <- readRDS(paste0('data/inputs/', DOCUMENT, '_n', NGRAMS, '_dtm.rds'))
 
 # Filename stubs for model outputs
-model_stub <- paste0('models/lda/lda_song_ngram', NGRAMS, '_k')
-plot_stub <- paste0('dump/lda_song_ngram', NGRAMS, '_k')
+model_stub <- paste0('models/lda/lda_', DOCUMENT, '_ngram', NGRAMS, '_k')
+plot_stub <- paste0('dump/lda_', DOCUMENT, '_ngram', NGRAMS, '_k')
 
 # LDA Modeling
 cl <- register_parallel()
 
 foreach (k=ks, .packages=c('magrittr', 'dplyr', 'tidytext', 'topicmodels', 'ggplot2')) %dopar% {
      
-    lda <- LDA(song.words.dtm, k=k, control=list(seed=bad.seed))
+    lda <- LDA(ngram.dtm, k=k, control=list(seed=bad.seed))
     # Save LDA model
     saveRDS(object=lda, file=paste0(model_stub, k, '.rds'))
     # Save beta spread plot
