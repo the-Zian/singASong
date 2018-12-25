@@ -10,11 +10,11 @@ lda_list <- gamma_list <- vector("list", 5)
 
 # Read in LDA 1-GRAM model objects, extract posterior gammas
 for(i in 1:length(ks)) {
-  lda_list[[i]] <- readRDS(paste0("lda_song_ngram1_k", ks[i], ".rds"))
-  gamma_list[[i]] <- lda_list[[i]]@gamma %>%
-    as.data.frame %>%
-    as.tbl()
-  gamma_list[[i]] <- cbind(lda_list[[i]]@documents %>% as.numeric(), gamma_list[[i]])
+    lda_list[[i]] <- readRDS(paste0("lda_song_ngram1_k", ks[i], ".rds"))
+    gamma_list[[i]] <- lda_list[[i]]@gamma %>%
+        as.data.frame %>%
+        as.tbl()
+    gamma_list[[i]] <- cbind(lda_list[[i]]@documents %>% as.numeric(), gamma_list[[i]])
 }
 
 gamma_list <- lapply(gamma_list, function(df) {names(df)[1] <- "song_id"; return(df)})
@@ -90,12 +90,12 @@ for(i in 1:5) {
 ## Homogeneity of topics
 
 melted_k20 <- data_list[[2]] %>%
-  filter(artist == "Queen") %>%
-  dplyr::select(song_id, starts_with("V")) %>%
-  as.data.frame() %>%
-  melt(id.vars = "song_id", variable.name = "topic", value.name = "gamma") %>%
-  as.tbl()
+    filter(artist == "Queen") %>%
+    dplyr::select(song_id, starts_with("V")) %>%
+    as.data.frame() %>%
+    melt(id.vars = "song_id", variable.name = "topic", value.name = "gamma") %>%
+    as.tbl()
 
 ggplot(melted_k20, aes(x = gamma, fill = topic)) +
-  geom_histogram(bins = 20) +
-  facet_wrap(~topic, scale = "free")
+    geom_histogram(bins = 20) +
+    facet_wrap(~topic, scale = "free")
