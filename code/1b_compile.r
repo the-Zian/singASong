@@ -36,6 +36,6 @@ songData <- tibble(artist=artists, album=albums, year=years, title=titles,
 if (length(userArgs)==0) {
     filename <- 'data/songData_full.csv'
 } else {
-    filename <- paste0('data/clean/songData_', pg_start, '_', pg_end, '.csv')
+    filename <- paste0('data/raw/songData_', pg_start, '_', pg_end, '.csv')
 }
 write.csv(songData, file=filename, row.names=FALSE)
