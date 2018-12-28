@@ -10,6 +10,7 @@ library(doParallel)
 
 # GLOBALS
 data(stop_words)
+stop_words$lexicon <- paste0(stop_words$lexicon, '::english')
 song_stops <- read_csv('data/inputs/song_stops.csv')
 song_stops$lexicon <- 'custom'
 stop_words <- rbind(stop_words,
@@ -38,27 +39,36 @@ print(paste0('Registered ', (num_cores), ' cores for parallel computing'))
 }
 
 
-unnest_ngrams <- function(dt, n=2, english=FALSE, stopWords=stop_words) {
-    # Unnest ngrams
-    # Remove stop words
-    # Remove punctuation
+unnest_ngrams <- function(dt, n=2, langs=NA, stopWords=stop_words) {
+    #` Unnest ngrams, removing stop words and punctuation
+    #` @param dt Cleaned lyrics data
+    #` @param n n-grams
+    #` @param languages Stop word languages to removes
+    #` @param stopWords Dictionary of stopwords
 
-    word_vars <- c(paste0('word', (1:n)))
-  
-    if (english) {
-        stops <- stopWords %>% filter(!grepl('tm', lexicon))
+    languages <- c('english', 'custom', 'spanish', 'french', 'portuguese', 'italian', 'german')
+
+    if (!all(langs %in% languages)) {
+        stop('language can only be [english, spanish, french, portuguese, italian, german, custom]')
     } else {
-        stops <- stopWords
+        if (is.na(langs)) {
+            langs <- languages
+        }
+        pattern <- paste0(langs, collapse='|')
+        stops <- filter(stopWords, any(!!languages %in% lexicon))
     }
 
+    word_vars <- c(paste0('word', (1:n)))
+
     dt <- dt %>%
-    unnest_tokens(ngram, lyrics, token='ngrams', n=n) %>%
-    separate(ngram, word_vars, sep=' ') %>%
-    mutate_at(.vars=word_vars, .fun=tolower) %>%
-    filter_at(.vars=word_vars, .vars_predicate=any_vars(!. %in% stops$word)) %>%
-    mutate_at(.vars=word_vars, .funs=gsub, pattern='[[:punct:]]', replacement=NA) %>%
-    drop_na(!!word_vars) %>%
-    unite(ngram, !!word_vars, sep=' ')
+        unnest_tokens(ngram, lyrics, token='ngrams', n=n) %>%
+        separate(ngram, word_vars, sep=' ') %>%
+        mutate_at(.vars=word_vars, .fun=tolower) %>%
+        mutate_at(.vars=word_vars, .funs=gsub, pattern='[[:punct:]]', replacement='') %>%
+        filter_at(.vars=word_vars, .vars_predicate=any_vars(!. %in% stops$word)) %>%
+        filter_at(.vars=word_vars, .vars_predicate=any_vars(nchar(.)>0)) %>%
+        drop_na(!!word_vars) %>%
+        unite(ngram, !!word_vars, sep=' ')
 
     return(dt)
 }
