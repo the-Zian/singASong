@@ -17,10 +17,8 @@ songs <- read_csv('data/songs_cleaned.csv')
 # PLOTS
 theme_set(theme_minimal())
 
-genres_list <- c("blues", "brassmilitary", "childrens", "electronic", "folkworldcountry", "funksoul", "hiphop", "jazz", 
-                  "latin", "non", "non-music", "pop", "reggae", "rock", "stage_screen")
-genre_labels <- c('Blues', 'Brass/Military', 'Children\'s', 'Electronic', 'Folk/World/Country', 'Funk/Soul', 'Hip-Hop', 
-                  'Jazz', 'Latin', 'None', 'Non-music', 'Pop', 'Reggae', 'Rock', 'Stage/Screen')
+genres_list <- c("blues", "brassmilitary", "childrens", "electronic", "folkworldcountry", "funksoul", "hiphop", "jazz", "latin", "non", "non-music", "pop", "reggae", "rock", "stage_screen")
+genre_labels <- c('Blues', 'Brass/Military', 'Children\'s', 'Electronic', 'Folk/World/Country', 'Funk/Soul', 'Hip-Hop', 'Jazz', 'Latin', 'None', 'Non-music', 'Pop', 'Reggae', 'Rock', 'Stage/Screen')
 names(genre_labels) <- genres_list
 
 tol18rainbow = list("#771155", "#AA4488", "#CC99BB", "#114477", "#4477AA", "#77AADD", "#117777", "#44AAAA", "#77CCCC", 

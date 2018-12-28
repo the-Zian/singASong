@@ -1,14 +1,11 @@
 # Purpose: Exploratory data analysis of scraped data
 
-suppressMessages(library(tidyverse))
-library(tidytext)
-library(tm)
+source('code/library_text.r')
 library(data.table)
 theme_set(theme_minimal())
 library(wordcloud)
 library(igraph)
 library(ggraph)
-source('code/library_text.r')
 
 
 ###################
@@ -25,11 +22,11 @@ songData[, genre1:=sub('^(.+?) \\|..*', '\\1', genre)]
 
 ###################
 # PLOTS
-ggplot(fortify(songData), aes(x=decade)) +
+ggplot(fortify(songData[lyrics!='',]), aes(x=decade)) +
 geom_bar(color='black', fill='seagreen', alpha=0.6) +
 scale_x_continuous(labels=seq(from=1930, to=2020, by=10), breaks=seq(from=1930, to=2020, by=10))
 
-ggplot(fortify(songData[lyrics=='',]), aes(x=genre1)) +
+ggplot(fortify(songData[lyrics!='',]), aes(x=genre1)) +
 geom_bar(color='black', fill='seagreen4', alpha=0.6) +
 theme(axis.text.x=element_text(angle=60, hjust=1))
 
@@ -99,7 +96,7 @@ genre_tfidf %>% group_by(genre1) %>%
 bigrams <- songData %>%
     unnest_tokens(bigram, lyrics, token='ngrams', n=2) %>%
     separate(bigram, c('word1', 'word2'), sep=' ') %>%
-    filter(!word1 %in% stop_words$word,
+    filter(!word1 %in% stop_words$word, !word2 %in% stop_words$word,
         !word2 %in% data.frame(word=tm::stopwords('spanish')))
 bigramsClean <- bigrams %>%
     unite(bigram, word1, word2, sep=' ')
