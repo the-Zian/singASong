@@ -1,5 +1,7 @@
 # Purpose: Cast full clean to dtm for lda
 
+paste0('*********\n', 'RUNNING 3a_cast_dtm.r\n', '*********')
+
 userArgs <- commandArgs(trailingOnly=TRUE)
 NGRAMS <- as.numeric(userArgs[[1]])
 DOCUMENT <- as.character(userArgs[[2]])
@@ -10,7 +12,7 @@ source('code/library_text.r')
 clean <- read_csv('data/songs_cleaned.csv')
 
 # DTM
-# Unnest tokens by NGRAMS
+# Unnest DOCUMENT tokens by NGRAMS
 tokens <- unnest_ngrams(clean, n=NGRAMS)
 
 # Additional cleaning on unnested tokens

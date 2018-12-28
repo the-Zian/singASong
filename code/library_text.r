@@ -48,12 +48,12 @@ unnest_ngrams <- function(dt, n=2, langs=NA, stopWords=stop_words) {
 
     languages <- c('english', 'custom', 'spanish', 'french', 'portuguese', 'italian', 'german')
 
-    if (!all(langs %in% languages)) {
+    if (is.na(langs)) {
+        langs <- languages
+        stops <- stopWords
+    } else if (!all(langs %in% languages)) {
         stop('language can only be [english, spanish, french, portuguese, italian, german, custom]')
     } else {
-        if (is.na(langs)) {
-            langs <- languages
-        }
         pattern <- paste0(langs, collapse='|')
         stops <- filter(stopWords, any(!!languages %in% lexicon))
     }

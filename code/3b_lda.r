@@ -1,5 +1,7 @@
 # Purpose: LDA
 
+
+paste0('*********\n', 'RUNNING 3b_lda.r\n', '*********')
 start_time <- Sys.time()
 
 # Parse user args
