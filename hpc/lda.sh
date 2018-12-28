@@ -20,20 +20,23 @@ PROJDIR=/home/$NETID/singASong
 cd $PROJDIR
 
 # Model settings
-# !TODO: Finish arg check for DOCUMENT
 NGRAMS=$(cat hpc/settings.csv | awk 'FNR==3 {print $2}')
-DOCUMENT=$(cat hpc/settings.csv | awk 'FNR=4 {print$2}')
+DOCUMENT=$(cat hpc/settings.csv | awk 'FNR==4 {print$2}')
 
 if [[ $DOCUMENT != 'artist' && $DOCUMENT != 'song' ]]
 then
     echo "DOCUMENT must be 'artist' or 'song'"
+    echo "check 'hpc/settings.csv'"
     exit 1
 fi
 
-# Check for NGRAM specific DTM, create if not found
+# Check for DOCUMENT - NGRAM specific DTM, create if not found
 if [ ! -e $PROJDIR/data/inputs/$DOCUMENT_n$NGRAMS_dtm.rds ]
 then
     Rscript $PROJDIR/code/3a_cast_dtm.r $NGRAMS $DOCUMENT
 fi
 
-Rscript $PROJDIR/code/3b_lda.r $NGRAMS $DOCUMENT
+# Run LDA model for K topics
+Ks=$(cat hpc/settings.csv | awk 'FNR==5 {print$2}')
+
+Rscript $PROJDIR/code/3b_lda.r $NGRAMS $DOCUMENT $Ks

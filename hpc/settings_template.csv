@@ -3,3 +3,4 @@ setting, value
 user, [chr nyu_netid]
 ngrams, [int > 0]
 document, [song, artist]
+topic, [semicolon separated ints]

@@ -7,12 +7,13 @@ userArgs <- commandArgs(trailingOnly=TRUE)
 # Hardcode userArgs until properly setup to be passed in
 NGRAMS <- as.numeric(userArgs[[1]])
 DOCUMENT <- as.character(userArgs[[2]])
+Ks <- as.character(userArgs[[3]])
 
 source('code/library_text.r')
 
 # LDA Settings
 bad.seed <- 666
-ks <- c(20, 30, 40, 50)
+ks <- sapply(strsplit(Ks, ';')[[1]], as.numeric, USE.NAMES=FALSE)
 
 
 ###################
