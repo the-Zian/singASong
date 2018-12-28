@@ -11,7 +11,7 @@ num_cores <- parallel::detectCores()
 cl <- parallel::makeCluster(num_cores - 1)
 doParallel::registerDoParallel(cl)
 
-partial_files <- system2('ls', 'data/clean/songData_*.csv', stdout=TRUE)
+partial_files <- system2('ls', 'data/raw/songData_*.csv', stdout=TRUE)
 
 # Read, clean, and compile data into one data.table
 combined <- rbindlist(foreach (f=partial_files, .packages=c('data.table')) %dopar% data.table::fread(f))
