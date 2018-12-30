@@ -1,6 +1,8 @@
 # Purpose: Cast full clean to dtm for lda
 
-paste0('*********\n', 'RUNNING 3a_cast_dtm.r\n', '*********')
+paste0('*********')
+paste0('RUNNING 3a_cast_dtm.r')
+paste0('*********')
 
 userArgs <- commandArgs(trailingOnly=TRUE)
 NGRAMS <- as.numeric(userArgs[[1]])

@@ -50,12 +50,11 @@ unnest_ngrams <- function(dt, n=2, langs=NA, stopWords=stop_words) {
 
     if (is.na(langs)) {
         langs <- languages
-        stops <- stopWords
     } else if (!all(langs %in% languages)) {
         stop('language can only be [english, spanish, french, portuguese, italian, german, custom]')
     } else {
         pattern <- paste0(langs, collapse='|')
-        stops <- filter(stopWords, any(!!languages %in% lexicon))
+        stopWords <- filter(stopWords, any(!!languages %in% lexicon))
     }
 
     word_vars <- c(paste0('word', (1:n)))
@@ -65,8 +64,8 @@ unnest_ngrams <- function(dt, n=2, langs=NA, stopWords=stop_words) {
         separate(ngram, word_vars, sep=' ') %>%
         mutate_at(.vars=word_vars, .fun=tolower) %>%
         mutate_at(.vars=word_vars, .funs=gsub, pattern='[[:punct:]]', replacement='') %>%
-        filter_at(.vars=word_vars, .vars_predicate=any_vars(!. %in% stops$word)) %>%
-        filter_at(.vars=word_vars, .vars_predicate=any_vars(nchar(.)>0)) %>%
+        filter_at(.vars=word_vars, .vars_predicate=all_vars(!. %in% stopWords$word)) %>%
+        filter_at(.vars=word_vars, .vars_predicate=all_vars(nchar(.)>0)) %>%
         drop_na(!!word_vars) %>%
         unite(ngram, !!word_vars, sep=' ')
 
