@@ -63,9 +63,10 @@ unnest_ngrams <- function(dt, n=2, langs=NA, stopWords=stop_words) {
         unnest_tokens(ngram, lyrics, token='ngrams', n=n) %>%
         separate(ngram, word_vars, sep=' ') %>%
         mutate_at(.vars=word_vars, .fun=tolower) %>%
-        mutate_at(.vars=word_vars, .funs=gsub, pattern='[[:punct:]]', replacement='') %>%
         filter_at(.vars=word_vars, .vars_predicate=all_vars(!. %in% stopWords$word)) %>%
+        mutate_at(.vars=word_vars, .funs=gsub, pattern='[[:punct:]]', replacement='') %>%
         filter_at(.vars=word_vars, .vars_predicate=all_vars(nchar(.)>0)) %>%
+        filter_at(.vars=word_vars, .vars_predicate=all_vars(!. %in% stopWords$word)) %>%
         drop_na(!!word_vars) %>%
         unite(ngram, !!word_vars, sep=' ')
 

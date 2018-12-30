@@ -9,7 +9,6 @@ NGRAMS <- as.numeric(userArgs[[1]])
 DOCUMENT <- as.character(userArgs[[2]])
 
 doc_id_var <- paste0(DOCUMENT, '_id')
-doc_id_var <- enquo(doc_id_var)
 
 source('code/library_text.r')
 
