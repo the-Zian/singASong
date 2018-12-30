@@ -1,0 +1,6 @@
+# NOTE: !This is a template only. Set all values, save as settings.csv, delete this line!
+setting, value
+user, [chr nyu_netid]
+ngrams, [int > 0]
+document, [song, artist]
+topic, [semicolon separated ints]
