@@ -1,11 +1,9 @@
 # Library of functions for text analysis
 
-suppressMessages(library(tidyverse))
-library(tidytext)
-library(tm)
-library(topicmodels)
-library(parallel)
-library(doParallel)
+pckgs <- c('tidyverse', 'tidytext', 'tm', 'topicmodels', 'parallel', 'doParallel')
+sapply(pckgs, function(pckg){
+    suppressMessages(library(pckg, character.only=TRUE, logical.return=TRUE))
+})
 
 
 # GLOBALS
